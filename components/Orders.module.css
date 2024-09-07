@@ -1,0 +1,72 @@
+.ordersContainer {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #eaf4eb;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    color: #2b7137;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.ordersTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableHeader {
+    background-color: #2b7137;
+    color: #fff;
+}
+
+.tableHeader th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: normal;
+}
+
+.tableRow {
+    border-bottom: 1px solid #ddd;
+}
+
+.tableRow td {
+    padding: 12px 15px;
+    color: #333;
+}
+
+.tableRow:nth-child(even) {
+    background-color: #f7f9f8;
+}
+
+.statusNotPicked {
+    color: #f4b41a;
+}
+
+.statusPicked {
+    color: #2b7137;
+}
+
+.statusDelivered {
+    color: #66a766;
+    /* Blend of #2b7137 and lighter green */
+}
+
+.detailsButton {
+    padding: 8px 12px;
+    background-color: #f4b41a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.detailsButton:hover {
+    background-color: #d39e0c;
+}

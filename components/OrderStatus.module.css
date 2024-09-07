@@ -1,5 +1,6 @@
 .statusContainer {
-    max-width: 600px;
+    width: 600px;
+    max-width: 95vw;
     margin: 40px auto;
     padding: 20px 40px;
     border-radius: 8px;
@@ -68,13 +69,13 @@
 .stepCircle {
     width: 20px;
     height: 20px;
-    left: 45%;
     border-radius: 50%;
     background-color: #f4b41a;
     border: 2px solid #2b7137;
     margin-bottom: 8px;
     position: relative;
     z-index: 1;
+    margin: 0 auto;
 }
 
 .stepLabel {

@@ -1,37 +1,55 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Styles from './Login.module.css';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginSuccess, loginFailure, checkAuth } from '@/redux/features/auth';
 
 const Login = () => {
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
-  const [error, setError] = useState('');
   const router = useRouter();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const error = useSelector(state => state.auth.error);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  if (isAuthenticated) {
+    router.push('/orders');
+  }
+
+  // Check authentication status on component mount
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  const handleLogin = () => {
+    // Example of a login action, normally this would involve API calls
+    const token = "exampleAuthToken"; // Replace with actual token from your login logic
+    if (token) {
+      dispatch(loginSuccess({ token }));
+    } else {
+      dispatch(loginFailure({ error: "Invalid login" }));
+    }
   };
+
+  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!credentials.username || !credentials.password) {
-      setError('Both fields are required.');
+      setErrorMsg('Both fields are required.');
       return;
     }
 
-    setError('');
+    setErrorMsg('');
 
     // hardcoded username and password
     if (credentials.username === 'ABC' && credentials.password === '1234') {
+      handleLogin();
       console.log('Login successful');
       router.push('/orders');
     } else {
-      setError('Invalid credentials! Please try again.');
+      setErrorMsg('Invalid credentials! Please try again.');
     }
   };
 
@@ -42,7 +60,7 @@ const Login = () => {
           Login
         </p>
 
-        {error && <p className={Styles.errorMessage}>{error}</p>}
+        {errorMsg && <p className={Styles.errorMessage}>{errorMsg}</p>}
 
         <div className={Styles.formGroup}>
           <label htmlFor="username" className={Styles.label}>Username:</label>
@@ -51,7 +69,7 @@ const Login = () => {
             id="username"
             name="username"
             value={credentials.username}
-            onChange={handleChange}
+            onChange={() => setCredentials({ ...credentials, username: event.target.value })}
             className={Styles.input}
             required
           />
@@ -64,7 +82,7 @@ const Login = () => {
             id="password"
             name="password"
             value={credentials.password}
-            onChange={handleChange}
+            onChange={() => setCredentials({ ...credentials, password: event.target.value })}
             className={Styles.input}
             required
           />

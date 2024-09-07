@@ -2,6 +2,7 @@
 import React from 'react';
 import Styles from './OrderStatus.module.css';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 // Same orders data or fetched from a backend/API
 const ordersData = [
@@ -17,6 +18,11 @@ const statusSteps = ['Not Picked', 'Picked', 'Delivered'];
 const OrderStatus = (props) => {
   const { orderId } = props;
   const router = useRouter();
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+  if (!isAuthenticated) {
+    router.push('/login');
+  }
 
   const order = ordersData.find((order) => order.id === orderId);
 
@@ -31,7 +37,7 @@ const OrderStatus = (props) => {
 
   return (
     <div className={Styles.statusContainer}>
-      <button className={Styles.backButton} onClick={() => {router.push('/orders')}}>
+      <button className={Styles.backButton} onClick={() => { router.push('/orders') }}>
         Back
       </button>
       <h2 className={Styles.header}>Order Status</h2>

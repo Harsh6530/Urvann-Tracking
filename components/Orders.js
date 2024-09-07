@@ -2,6 +2,7 @@
 import React from 'react';
 import Styles from './Orders.module.css';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 const ordersData = [
   { id: "1", orderNumber: 'A001', date: '2024-09-01', customer: 'John Doe', status: 'Not Picked' },
@@ -14,6 +15,11 @@ const ordersData = [
 
 const Orders = () => {
   const router = useRouter();
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+  if (!isAuthenticated) {
+    router.push('/login');
+  }
 
   const handleOrderClick = (orderId) => {
     router.push(`/orders/${orderId}`);

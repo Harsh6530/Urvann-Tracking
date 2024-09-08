@@ -28,7 +28,7 @@ const Orders = () => {
   return (
     <div className={Styles.ordersContainer}>
       <h2 className={Styles.header}>Orders List</h2>
-      <div className='overflow-x-scroll'>
+      <div className='overflow-x-scroll' style={{ scrollbarWidth: 'none' }}>
         <table className={Styles.ordersTable}>
           <thead>
             <tr className={Styles.tableHeader}>

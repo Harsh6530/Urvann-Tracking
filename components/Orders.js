@@ -28,35 +28,37 @@ const Orders = () => {
   return (
     <div className={Styles.ordersContainer}>
       <h2 className={Styles.header}>Orders List</h2>
-      <table className={Styles.ordersTable}>
-        <thead>
-          <tr className={Styles.tableHeader}>
-            <th>Order #</th>
-            <th>Date</th>
-            <th>Customer</th>
-            <th>Status</th>
-            <th>View Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {ordersData.map((order) => (
-            <tr key={order.id} className={Styles.tableRow}>
-              <td>{order.orderNumber}</td>
-              <td>{order.date}</td>
-              <td>{order.customer}</td>
-              <td className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</td>
-              <td>
-                <button
-                  className={Styles.detailsButton}
-                  onClick={() => handleOrderClick(order.id)}
-                >
-                  Details
-                </button>
-              </td>
+      <div className='overflow-x-scroll'>
+        <table className={Styles.ordersTable}>
+          <thead>
+            <tr className={Styles.tableHeader}>
+              <th>Order #</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Status</th>
+              <th>View Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {ordersData.map((order) => (
+              <tr key={order.id} className={Styles.tableRow}>
+                <td>{order.orderNumber}</td>
+                <td>{order.date}</td>
+                <td>{order.customer}</td>
+                <td className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</td>
+                <td>
+                  <button
+                    className={Styles.detailsButton}
+                    onClick={() => handleOrderClick(order.id)}
+                  >
+                    Details
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

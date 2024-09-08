@@ -16,7 +16,7 @@ const OrderStatus = (props) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const token = useSelector(state => state.auth.userToken);
-  const [ordersData, setOrdersData] = useState([]);
+  const [order, setOrder] = useState(null);
 
   if (!isAuthenticated) {
     router.push('/login');
@@ -34,7 +34,7 @@ const OrderStatus = (props) => {
       const response = await fetchOrders(email, phone);
 
       if (response.success) {
-        setOrdersData(response.orders);
+        setOrder(response.orders.find(order => order.orderNumber === parseInt(orderId)));
       } else {
         console.error(response.message);
       }
@@ -47,8 +47,6 @@ const OrderStatus = (props) => {
     getOrders();
     /* eslint-disable-next-line */
   }, []);
-
-  const order = ordersData.find((order) => order.orderNumber === orderId);
 
   if (!order) {
     return <p className={Styles.error}>Order not found</p>;

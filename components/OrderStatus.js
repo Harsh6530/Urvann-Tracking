@@ -74,7 +74,7 @@ const OrderStatus = (props) => {
         <p><strong>Status:</strong> <span className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</span></p>
       </div>
       <div className={Styles.statusTimeline}>
-        {relevantSteps.map((step, index) => (
+        {statusSteps.map((step, index) => (
           <div
             key={step}
             className={`${Styles.statusStep} ${index <= currentStatusIndex ? Styles.completed : ''}`}

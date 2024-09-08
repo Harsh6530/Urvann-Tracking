@@ -61,9 +61,9 @@ const Orders = () => {
 
   return (
     <div className={Styles.ordersContainer}>
+      <h2 className={Styles.header}>All Orders</h2>
       {ordersData.length > 0 ?
         <>
-          <h2 className={Styles.header}>Orders List (Customer: {ordersData[0].customer})</h2>
           {ordersData.map((order) => (
             <div
               key={order.orderNumber}
@@ -86,7 +86,6 @@ const Orders = () => {
             </div>
           ))}
         </> : <>
-          <h2 className={Styles.header}>Orders List</h2>
           <p className='text-center'>No orders found</p>
         </>
       }

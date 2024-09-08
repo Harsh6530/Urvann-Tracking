@@ -10,7 +10,7 @@ export async function login(data) {
 
         const { email, phone } = data;
 
-        const route = await Route.findOne({ shipping_address_phone: phone });
+        const route = await Route.findOne({ email });
 
         if (!route) {
             return {
@@ -20,7 +20,8 @@ export async function login(data) {
             }
         }
 
-        const phoneVerified = (phone === route.shipping_address_phone);
+        // consider only last 10 digits of phone number (excluding country code)
+        const phoneVerified = (phone === route.shipping_address_phone.slice(-10));
 
         if (!phoneVerified) {
             return {

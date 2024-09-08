@@ -8,7 +8,7 @@ export async function fetchOrders(email, phone) {
     try {
         await connectDB();
 
-        const route = await Route.find({ email, shipping_address_phone: phone });
+        const route = await Route.find({ email, shipping_address_phone: { $regex: phone.slice(-10) } });
 
         if (!route || route.length === 0) {
             return {

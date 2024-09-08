@@ -58,41 +58,43 @@ const Orders = () => {
   return (
     <div className={Styles.ordersContainer}>
       {ordersData.length > 0 ?
-        <div className='overflow-x-scroll' style={{ scrollbarWidth: 'none' }}>
+        <>
           <h2 className={Styles.header}>Orders List (Customer: {ordersData[0].customer})</h2>
-          <table className={Styles.ordersTable}>
-            <thead>
-              <tr className={Styles.tableHeader}>
-                <th>Order ID</th>
-                <th className='!text-center'>Product</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>View Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ordersData.map((order) => (
-                <tr key={order.orderNumber} className={Styles.tableRow}>
-                  <td>{order.orderNumber}</td>
-                  <td className='flex items-center gap-5 min-w-72'>
-                    <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
-                    {order.product}
-                  </td>
-                  <td>{parseOrderDate(order.date)}</td>
-                  <td className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</td>
-                  <td>
-                    <button
-                      className={Styles.detailsButton}
-                      onClick={() => router.push(`/orders/${order.orderNumber}`)}
-                    >
-                      Details
-                    </button>
-                  </td>
+          <div className='overflow-x-scroll' style={{ scrollbarWidth: 'none' }}>
+            <table className={Styles.ordersTable}>
+              <thead>
+                <tr className={Styles.tableHeader}>
+                  <th>Order ID</th>
+                  <th className='!text-center'>Product</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>View Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div> : <>
+              </thead>
+              <tbody>
+                {ordersData.map((order) => (
+                  <tr key={order.orderNumber} className={Styles.tableRow}>
+                    <td>{order.orderNumber}</td>
+                    <td className='flex items-center gap-5 min-w-72'>
+                      <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
+                      {order.product}
+                    </td>
+                    <td>{parseOrderDate(order.date)}</td>
+                    <td className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</td>
+                    <td>
+                      <button
+                        className={Styles.detailsButton}
+                        onClick={() => router.push(`/orders/${order.orderNumber}`)}
+                      >
+                        Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </> : <>
           <h2 className={Styles.header}>Orders List</h2>
           <p className='text-center'>No orders found</p>
         </>

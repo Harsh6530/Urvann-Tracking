@@ -1,8 +1,10 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import Styles from './Orders.module.css';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { authenticate } from '@/server/auth-actions';
+import { checkAuth } from '@/redux/features/auth';
 
 const ordersData = [
   { id: "1", orderNumber: 'A001', date: '2024-09-01', customer: 'John Doe', status: 'Not Picked' },
@@ -15,15 +17,27 @@ const ordersData = [
 
 const Orders = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const token = useSelector(state => state.auth.userToken);
 
   if (!isAuthenticated) {
     router.push('/login');
   }
 
-  const handleOrderClick = (orderId) => {
-    router.push(`/orders/${orderId}`);
-  };
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  const getOrders = async () => {
+    const user = await authenticate(token);
+    console.log(user);
+  }
+
+  useEffect(() => {
+    getOrders();
+    /* eslint-disable-next-line */
+  }, []);
 
   return (
     <div className={Styles.ordersContainer}>
@@ -32,7 +46,7 @@ const Orders = () => {
         <table className={Styles.ordersTable}>
           <thead>
             <tr className={Styles.tableHeader}>
-              <th>Order #</th>
+              <th>Order ID</th>
               <th>Date</th>
               <th>Customer</th>
               <th>Status</th>
@@ -49,7 +63,7 @@ const Orders = () => {
                 <td>
                   <button
                     className={Styles.detailsButton}
-                    onClick={() => handleOrderClick(order.id)}
+                    onClick={() => router.push(`/orders/${order.id}`)}
                   >
                     Details
                   </button>

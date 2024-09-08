@@ -4,6 +4,7 @@ import Styles from './Login.module.css';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess, loginFailure, checkAuth } from '@/redux/features/auth';
+import { login } from '@/server/auth-actions';
 
 const Login = () => {
   const router = useRouter();
@@ -20,37 +21,36 @@ const Login = () => {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  const handleLogin = () => {
-    // Example of a login action, normally this would involve API calls
-    const token = "exampleAuthToken"; // Replace with actual token from your login logic
-    if (token) {
-      dispatch(loginSuccess({ token }));
+  const handleLogin = async () => {
+    const response = await login(credentials);
+
+    if (response.success === false) {
+      dispatch(loginFailure({ error: response.message }));
+      if (response.status === 401) {
+        setErrorMsg('Invalid credentials! Please try again.');
+      } else {
+        setErrorMsg('An error occurred! Please try again.');
+        console.error(response.error);
+      }
     } else {
-      dispatch(loginFailure({ error: "Invalid login" }));
+      dispatch(loginSuccess({ token: response.token }));
+      router.push('/orders');
     }
   };
 
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [credentials, setCredentials] = useState({ email: '', phone: '' });
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!credentials.username || !credentials.password) {
+    if (!credentials.email || !credentials.phone) {
       setErrorMsg('Both fields are required.');
       return;
     }
-
     setErrorMsg('');
 
-    // hardcoded username and password
-    if (credentials.username === 'ABC' && credentials.password === '1234') {
-      handleLogin();
-      console.log('Login successful');
-      router.push('/orders');
-    } else {
-      setErrorMsg('Invalid credentials! Please try again.');
-    }
+    handleLogin();
   };
 
   return (
@@ -63,26 +63,26 @@ const Login = () => {
         {errorMsg && <p className={Styles.errorMessage}>{errorMsg}</p>}
 
         <div className={Styles.formGroup}>
-          <label htmlFor="username" className={Styles.label}>Username:</label>
+          <label htmlFor="email" className={Styles.label}>Email:</label>
           <input
             type="text"
-            id="username"
-            name="username"
-            value={credentials.username}
-            onChange={() => setCredentials({ ...credentials, username: event.target.value })}
+            id="email"
+            name="email"
+            value={credentials.email}
+            onChange={(event) => setCredentials({ ...credentials, email: event.target.value })}
             className={Styles.input}
             required
           />
         </div>
 
         <div className={Styles.formGroup}>
-          <label htmlFor="password" className={Styles.label}>Password:</label>
+          <label htmlFor="phone" className={Styles.label}>Phone Number:</label>
           <input
-            type="password"
-            id="password"
-            name="password"
-            value={credentials.password}
-            onChange={() => setCredentials({ ...credentials, password: event.target.value })}
+            type="text"
+            id="phone"
+            name="phone"
+            value={credentials.phone}
+            onChange={(event) => setCredentials({ ...credentials, phone: event.target.value })}
             className={Styles.input}
             required
           />

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { authenticate } from '@/server/auth-actions';
 import { checkAuth } from '@/redux/features/auth';
 import { fetchOrders } from '@/server/order-actions';
+import Image from 'next/image';
 
 const parseOrderDate = (date) => {
   const parsedDate = new Date(date);
@@ -63,7 +64,7 @@ const Orders = () => {
             <thead>
               <tr className={Styles.tableHeader}>
                 <th>Order ID</th>
-                <th>Product</th>
+                <th className='!text-center'>Product</th>
                 <th>Date</th>
                 <th>Status</th>
                 <th>View Status</th>
@@ -73,7 +74,10 @@ const Orders = () => {
               {ordersData.map((order) => (
                 <tr key={order.orderNumber} className={Styles.tableRow}>
                   <td>{order.orderNumber}</td>
-                  <td>{order.product}</td>
+                  <td className='flex items-center gap-5 min-w-72'>
+                    <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
+                    {order.product}
+                  </td>
                   <td>{parseOrderDate(order.date)}</td>
                   <td className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</td>
                   <td>

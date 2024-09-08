@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from '@/redux/features/auth';
 import { authenticate } from '@/server/auth-actions';
 import { fetchOrders } from '@/server/order-actions';
+import Image from 'next/image';
 
 const statusSteps = ['Not Picked', 'Picked', 'Delivered'];
 
@@ -65,6 +66,7 @@ const OrderStatus = (props) => {
       </button>
       <h2 className={Styles.header}>Order Status</h2>
       <div className={Styles.orderDetails}>
+        <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
         <p><strong>Order Number:</strong> {order.orderNumber}</p>
         <p><strong>Product:</strong> {order.product}</p>
         <p><strong>Date:</strong> {order.date}</p>

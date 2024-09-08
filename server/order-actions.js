@@ -19,7 +19,7 @@ export async function fetchOrders(email, phone) {
         }
 
         const orders = await Promise.all(route.map(async (order) => {
-            const status = (order.Pickup_Status === "Not Picked") ? "Not Picked" : (order.Delivery_Status === "Not Delivered") ? "Not Delivered" : "Delivered";
+            const status = (order.Pickup_Status === "Not Picked") ? "Order placed" : (order.Delivery_Status === "Not Delivered") ? "Not Delivered" : "Delivered";
 
             const imgURLResponse = await fetchImageURL(order.line_item_sku);
             const imgURL = imgURLResponse.success ? imgURLResponse.imgURL : null;

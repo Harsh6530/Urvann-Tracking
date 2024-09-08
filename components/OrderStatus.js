@@ -8,7 +8,7 @@ import { authenticate } from '@/server/auth-actions';
 import { fetchOrders } from '@/server/order-actions';
 import Image from 'next/image';
 
-const statusSteps = ['Not Picked', 'Picked', 'Delivered'];
+const statusSteps = ['Order placed', 'Picked', 'Delivered'];
 
 const OrderStatus = (props) => {
   const { orderId } = props;

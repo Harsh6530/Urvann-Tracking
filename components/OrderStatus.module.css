@@ -31,7 +31,7 @@
     margin-bottom: 10px;
 }
 
-.statusNotPicked {
+.statusOrderplaced {
     color: red;
 }
 
@@ -81,7 +81,8 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: #f4b41a;
+    /* background-color: #f4b41a; */
+    background-color: #2b7137;
     border: 2px solid #2b7137;
     margin-bottom: 8px;
     position: relative;

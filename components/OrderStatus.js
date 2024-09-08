@@ -77,7 +77,7 @@ const OrderStatus = (props) => {
         {relevantSteps.map((step, index) => (
           <div
             key={step}
-            className={`${Styles.statusStep} ${index === currentStatusIndex ? Styles.completed : ''}`}
+            className={`${Styles.statusStep} ${index <= currentStatusIndex ? Styles.completed : ''}`}
           >
             <div className={Styles.stepCircle}></div>
             <span className={Styles.stepLabel}>{step}</span>

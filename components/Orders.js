@@ -7,15 +7,19 @@ import { authenticate } from '@/server/auth-actions';
 import { checkAuth } from '@/redux/features/auth';
 import { fetchOrders } from '@/server/order-actions';
 import Image from 'next/image';
+import { FaChevronRight as NextIcon } from 'react-icons/fa';
 
 const parseOrderDate = (date) => {
   const parsedDate = new Date(date);
 
-  const day = parsedDate.getDate().toString().padStart(2, '0');
-  const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
-  const year = parsedDate.getFullYear();
+  // Sun, 25 Jul
+  return parsedDate.toDateString().slice(0, 3) + ', ' + parsedDate.getDate() + ' ' + parsedDate.toDateString().slice(4, 7);
 
-  return `${day}/${month}/${year}`;
+  // const day = parsedDate.getDate().toString().padStart(2, '0');
+  // const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
+  // const year = parsedDate.getFullYear();
+
+  // return `${day}/${month}/${year}`;
 };
 
 const Orders = () => {
@@ -60,40 +64,27 @@ const Orders = () => {
       {ordersData.length > 0 ?
         <>
           <h2 className={Styles.header}>Orders List (Customer: {ordersData[0].customer})</h2>
-          <div className='overflow-x-scroll' style={{ scrollbarWidth: 'none' }}>
-            <table className={Styles.ordersTable}>
-              <thead>
-                <tr className={Styles.tableHeader}>
-                  <th>Order ID</th>
-                  <th className='!text-center'>Product</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>View Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ordersData.map((order) => (
-                  <tr key={order.orderNumber} className={Styles.tableRow}>
-                    <td>{order.orderNumber}</td>
-                    <td className='flex items-center gap-5 min-w-72'>
-                      <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
-                      {order.product}
-                    </td>
-                    <td>{parseOrderDate(order.date)}</td>
-                    <td className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</td>
-                    <td>
-                      <button
-                        className={Styles.detailsButton}
-                        onClick={() => router.push(`/orders/${order.orderNumber}`)}
-                      >
-                        Details
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {ordersData.map((order) => (
+            <div
+              key={order.orderNumber}
+              className={Styles.individualOrder}
+              onClick={() => router.push(`/orders/${order.orderNumber}`)}
+            >
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-5 min-w-72'>
+                  <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
+                  <div>
+                    <p className='font-semibold text-lg'>{order.product}</p>
+                    <p className='text-sm'>Order placed on {parseOrderDate(order.date)}</p>
+                    <p className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</p>
+                  </div>
+                </div>
+                <div>
+                  <NextIcon />
+                </div>
+              </div>
+            </div>
+          ))}
         </> : <>
           <h2 className={Styles.header}>Orders List</h2>
           <p className='text-center'>No orders found</p>

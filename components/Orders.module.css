@@ -1,5 +1,5 @@
 .ordersContainer {
-    width: 800px;
+    width: 600px;
     max-width: 95vw;
     margin: 40px auto;
     padding: 20px;
@@ -16,34 +16,17 @@
     font-weight: bold;
 }
 
-.ordersTable {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.tableHeader {
-    background-color: #2b7137;
-    color: #fff;
-}
-
-.tableHeader th {
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: normal;
-    text-wrap: nowrap;
-}
-
-.tableRow {
+.individualOrder {
     border-bottom: 1px solid #ddd;
-}
-
-.tableRow td {
+    background-color: #f7f9f8;
     padding: 12px 15px;
     color: #333;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
-.tableRow:nth-child(even) {
-    background-color: #f7f9f8;
+.individualOrder:not(:last-child) {
+    margin-bottom: 10px;
 }
 
 .productImage {
@@ -64,18 +47,4 @@
 .statusDelivered {
     color: #66a766;
     /* Blend of #2b7137 and lighter green */
-}
-
-.detailsButton {
-    padding: 8px 12px;
-    background-color: #f4b41a;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.detailsButton:hover {
-    background-color: #d39e0c;
 }

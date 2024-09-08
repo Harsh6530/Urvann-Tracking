@@ -1,30 +1,53 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Styles from './OrderStatus.module.css';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
-
-// Same orders data or fetched from a backend/API
-const ordersData = [
-  { id: "1", orderNumber: 'A001', date: '2024-09-01', customer: 'John Doe', status: 'Not Picked' },
-  { id: "2", orderNumber: 'A002', date: '2024-09-02', customer: 'Jane Smith', status: 'Picked' },
-  { id: "3", orderNumber: 'A003', date: '2024-09-03', customer: 'Alice Johnson', status: 'Delivered' },
-  { id: "4", orderNumber: 'A004', date: '2024-09-04', customer: 'Bob Johnson', status: 'Not Picked' },
-  { id: "5", orderNumber: 'A005', date: '2024-09-05', customer: 'Sarah Davis', status: 'Picked' },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { checkAuth } from '@/redux/features/auth';
+import { authenticate } from '@/server/auth-actions';
+import { fetchOrders } from '@/server/order-actions';
 
 const statusSteps = ['Not Picked', 'Picked', 'Delivered'];
 
 const OrderStatus = (props) => {
   const { orderId } = props;
   const router = useRouter();
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const token = useSelector(state => state.auth.userToken);
+  const [ordersData, setOrdersData] = useState([]);
 
   if (!isAuthenticated) {
     router.push('/login');
   }
 
-  const order = ordersData.find((order) => order.id === orderId);
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  const getOrders = async () => {
+    const user = await authenticate(token);
+
+    if (user.success) {
+      const { email, phone } = user.data;
+      const response = await fetchOrders(email, phone);
+
+      if (response.success) {
+        setOrdersData(response.orders);
+      } else {
+        console.error(response.message);
+      }
+    } else {
+      console.error(user.message);
+    }
+  }
+
+  useEffect(() => {
+    getOrders();
+    /* eslint-disable-next-line */
+  }, []);
+
+  const order = ordersData.find((order) => order.orderNumber === orderId);
 
   if (!order) {
     return <p className={Styles.error}>Order not found</p>;
@@ -43,6 +66,7 @@ const OrderStatus = (props) => {
       <h2 className={Styles.header}>Order Status</h2>
       <div className={Styles.orderDetails}>
         <p><strong>Order Number:</strong> {order.orderNumber}</p>
+        <p><strong>Product:</strong> {order.product}</p>
         <p><strong>Date:</strong> {order.date}</p>
         <p><strong>Customer:</strong> {order.customer}</p>
         <p><strong>Status:</strong> <span className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</span></p>

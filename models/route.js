@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const routeSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   // Order_Type: { type: String, required: true },
-  // order_id: { type: String, required: true },
+  order_id: { type: String, required: true },
+  created_on: { type: String, required: true },
   // status: { type: String, required: true },
   // txn_id: { type: String, required: true },
   seller_name: { type: String, required: true },

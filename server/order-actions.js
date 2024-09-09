@@ -35,7 +35,7 @@ export async function fetchOrders(email, phone) {
             const status = order.Pickup_Status === "Not Picked"
                 ? "Order placed"
                 : order.Delivery_Status === "Not Delivered"
-                    ? "Not Delivered"
+                    ? "Not delivered"
                     : "Delivered";
 
             // Get image URL from the photoMap using SKU

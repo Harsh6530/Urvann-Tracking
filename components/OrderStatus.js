@@ -52,10 +52,16 @@ const OrderStatus = (props) => {
     return <p className={Styles.error}>Order not found</p>;
   }
 
-  const currentStatusIndex = statusSteps.indexOf(order.status);
+  const currentStatusIndex =
+    (order.status === 'Not delivered') ?
+      statusSteps.indexOf("Delivered") :
+      statusSteps.indexOf(order.status);
 
-  // Filter the steps to only include up to and including the current status
-  const relevantSteps = statusSteps.slice(0, currentStatusIndex + 1);
+  // Handle looping status steps
+  const relevantSteps =
+    (order.status === 'Not delivered') ?
+      statusSteps.slice(0, 2).concat('Not delivered').concat(statusSteps.slice(0, 3)) :
+      statusSteps.slice(0, 3);
 
   return (
     <div className={Styles.statusContainer}>
@@ -72,10 +78,10 @@ const OrderStatus = (props) => {
         <p><strong>Status:</strong> <span className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</span></p>
       </div>
       <div className={Styles.statusTimeline}>
-        {statusSteps.map((step, index) => (
+        {relevantSteps.map((step, index) => (
           <div
             key={step}
-            className={`${Styles.statusStep} ${index <= currentStatusIndex ? Styles.completed : ''}`}
+            className={`${Styles.statusStep} ${index <= currentStatusIndex ? Styles.completed : ''} ${step === 'Not delivered' ? Styles.notDelivered : ''}`}
           >
             <div className={Styles.stepCircle}></div>
             <span className={Styles.stepLabel}>{step}</span>

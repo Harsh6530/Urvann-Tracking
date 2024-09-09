@@ -43,6 +43,10 @@
     color: #2b7137;
 }
 
+.statusNotdelivered {
+    color: #ff5733;
+}
+
 .error {
     margin-top: 20px;
     text-align: center;
@@ -98,6 +102,10 @@
     color: #2b7137;
 }
 
+.notDelivered .stepLabel {
+    color: #ff5733;
+}
+
 .statusStep.completed .stepCircle {
     background-color: #2b7137;
     border-color: #2b7137;
@@ -112,6 +120,27 @@
     border-bottom: 2px solid white;
     transform: rotate(-45deg);
     position: absolute;
+}
+
+.statusStep.notDelivered .stepCircle {
+    background-color: #ff5733;
+    border-color: #ff5733;
+}
+
+.statusStep.notDelivered .stepCircle::before,
+.statusStep.notDelivered .stepCircle::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.statusStep.notDelivered .stepCircle::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .statusStep:not(:last-child)::after {

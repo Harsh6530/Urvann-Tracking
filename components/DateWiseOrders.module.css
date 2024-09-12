@@ -32,22 +32,9 @@
 }
 
 .orderDetails {
-    margin-top: 10px;
     padding-left: 20px;
+    padding-bottom: 10px;
     border-left: 2px solid #ccc;
-}
-
-.individualOrderDetail {
-    padding: 10px 0;
-    border-bottom: 1px solid #eaeaea;
-    cursor: pointer;
-}
-
-.productImage {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 4px;
 }
 
 .statusOrderplaced {
@@ -65,4 +52,29 @@
 
 .statusNotdelivered {
     color: #ff5733;
+}
+
+.viewProductsButton {
+    margin: 0 auto;
+    padding: 8px 16px;
+    background-color: #2b7137;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+    display: block;
+}
+
+.viewProductsButton:hover {
+    background-color: #24612e;
+    transform: scale(1.05);
+}
+
+.viewProductsButton:active {
+    background-color: #1f5027;
+    transform: scale(0.98);
 }

@@ -1,0 +1,64 @@
+.ordersContainer {
+    width: 600px;
+    max-width: 95vw;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #eaf4eb;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.backButton {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #2b7137;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.backButton:hover {
+    background-color: #1e5a2a;
+}
+
+.header {
+    color: #2b7137;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.individualOrder {
+    border-bottom: 1px solid #ddd;
+    background-color: #f7f9f8;
+    padding: 12px 15px;
+    color: #333;
+    border-radius: 8px;
+}
+
+.individualOrder:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.productImage {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.statusNotPicked {
+    color: #f4b41a;
+}
+
+.statusPicked {
+    color: #2b7137;
+}
+
+.statusDelivered {
+    color: #66a766;
+    /* Blend of #2b7137 and lighter green */
+}

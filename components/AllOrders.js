@@ -68,8 +68,8 @@ const Orders = () => {
       </div>
 
       {view === 'pending' ?
-        <DateWiseOrders orders={ordersPendingData} /> :
-        <DateWiseOrders orders={ordersDeliveredData} />
+        <DateWiseOrders orders={ordersPendingData} deliveryStatus={'pending'} /> :
+        <DateWiseOrders orders={ordersDeliveredData} deliveryStatus={'delivered'} />
       }
     </div>
   );

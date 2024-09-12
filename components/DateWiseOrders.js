@@ -1,5 +1,4 @@
 "use client";
-import Image from 'next/image';
 import { FaChevronRight as NextIcon, FaChevronDown as DownIcon } from 'react-icons/fa';
 import Styles from './DateWiseOrders.module.css';
 import { useState } from 'react';
@@ -11,16 +10,21 @@ const parseOrderDate = (date) => {
 
   // Sun, 25 Jul
   return parsedDate.toDateString().slice(0, 3) + ', ' + parsedDate.getDate() + ' ' + parsedDate.toDateString().slice(4, 7);
-
-  // const day = parsedDate.getDate().toString().padStart(2, '0');
-  // const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
-  // const year = parsedDate.getFullYear();
-
-  // return `${day}/${month}/${year}`;
 };
 
+const getDateString = (date) => {
+  // Tuesday, September 10, 2024, 7:03:17 AM to 10092024
+  const parsedDate = new Date(date);
+
+  const day = parsedDate.getDate().toString().padStart(2, '0');
+  const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
+  const year = parsedDate.getFullYear();
+
+  return `${day}${month}${year}`;
+}
+
 const DateWiseOrders = (props) => {
-  const { orders } = props;
+  const { orders, deliveryStatus } = props;
   const router = useRouter();
 
   // group orders by date
@@ -69,27 +73,15 @@ const DateWiseOrders = (props) => {
               </div>
               {expandedDate === date && (
                 <div className={Styles.orderDetails}>
-                  {groupedOrders[date].map((order) => (
-                    <div
-                      key={order.orderNumber}
-                      className={Styles.individualOrderDetail}
-                      onClick={() => { router.push(`/order/${order.orderNumber}`) }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-5 min-w-72">
-                          <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
-                          <div>
-                            <p className="font-semibold">{order.product}</p>
-                            <p className="text-xs text-[#666]">Order placed on {parseOrderDate(order.date)}</p>
-                            <p className={Styles[`status${order.status.replace(' ', '')}`] + " text-sm font-medium"}>{order.status}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className='pb-5'>
+                  <div className='py-1'>
                     <OrderStatusTimeline status={groupedOrders[date].status} />
                   </div>
+                  <button
+                    className={Styles.viewProductsButton}
+                    onClick={() => router.push(`/order/${deliveryStatus}/${getDateString(groupedOrders[date][0].date)}`)}
+                  >
+                    View Products
+                  </button>
                 </div>
               )}
             </div>

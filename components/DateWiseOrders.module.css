@@ -1,21 +1,53 @@
-.individualOrder {
-    border-bottom: 1px solid #ddd;
-    background-color: #f7f9f8;
-    padding: 12px 15px;
-    color: #333;
-    border-radius: 8px;
-    cursor: pointer;
+.orderSummary {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
 }
 
-.individualOrder:not(:last-child) {
+.date {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.totalProducts {
+    font-size: 14px;
+    color: #666;
+}
+
+.status {
+    font-size: 14px;
+    font-weight: bold;
+    color: #2b7137;
+    /* Default color for delivered, override as needed */
+}
+
+.individualOrder {
+    padding: 15px;
+    background-color: #f7f9f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     margin-bottom: 10px;
 }
 
+.orderDetails {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 2px solid #ccc;
+}
+
+.individualOrderDetail {
+    padding: 10px 0;
+    border-bottom: 1px solid #eaeaea;
+    cursor: pointer;
+}
+
 .productImage {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 4px;
 }
 
 .statusNotPicked {
@@ -23,10 +55,14 @@
 }
 
 .statusPicked {
-    color: #2b7137;
+    color: #66a766;
+    /* Blend of #2b7137 and lighter green */
 }
 
 .statusDelivered {
-    color: #66a766;
-    /* Blend of #2b7137 and lighter green */
+    color: #2b7137;
+}
+
+.statusNotdelivered {
+    color: #ff5733;
 }

@@ -63,7 +63,7 @@ const OrderStatus = (props) => {
         <p><strong>Product:</strong> {order.product}</p>
         <p><strong>Date:</strong> {order.date}</p>
         <p><strong>Customer:</strong> {order.customer}</p>
-        <p><strong>Status:</strong> <span className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</span></p>
+        <p><strong>Status:</strong> <span className={Styles[`status${order.status.replace(' ', '')}`] + " font-semibold"}>{order.status}</span></p>
       </div>
       <OrderStatusTimeline status={order.status} />
     </div>

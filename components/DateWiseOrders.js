@@ -1,6 +1,10 @@
+"use client";
 import Image from 'next/image';
-import { FaChevronRight as NextIcon } from 'react-icons/fa';
+import { FaChevronRight as NextIcon, FaChevronDown as DownIcon } from 'react-icons/fa';
 import Styles from './DateWiseOrders.module.css';
+import { useState } from 'react';
+import OrderStatusTimeline from './OrderStatusTimeline';
+import { useRouter } from 'next/navigation';
 
 const parseOrderDate = (date) => {
   const parsedDate = new Date(date);
@@ -17,29 +21,77 @@ const parseOrderDate = (date) => {
 
 const DateWiseOrders = (props) => {
   const { orders } = props;
+  const router = useRouter();
+
+  // group orders by date
+  const groupedOrders = {};
+  orders.forEach((order) => {
+    const date = parseOrderDate(order.date);
+    if (groupedOrders[date]) {
+      groupedOrders[date].push(order);
+    } else {
+      groupedOrders[date] = [order];
+    }
+  });
+
+  // if all orders are in delivered state then status is delivered
+  // if any order is in picked state then status is picked
+  Object.keys(groupedOrders).forEach((date) => {
+    const status = groupedOrders[date].every((order) => order.status === 'Delivered') ? 'Delivered'
+      : groupedOrders[date].some((order) => order.status === 'Picked') ? 'Picked' : 'Not Picked';
+    groupedOrders[date].status = status;
+  });
+
+  const [expandedDate, setExpandedDate] = useState(null);
+
   return (
     <div>
       {(orders.length > 0 ?
         <>
-          {orders.map((order) => (
+          {Object.keys(groupedOrders).map((date) => (
             <div
-              key={order.orderNumber}
+              key={date}
               className={Styles.individualOrder}
-              onClick={() => router.push(`/orders/${order.orderNumber}`)}
             >
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center gap-5 min-w-72'>
-                  <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
-                  <div>
-                    <p className='font-semibold text-lg'>{order.product}</p>
-                    <p className='text-sm'>Order placed on {parseOrderDate(order.date)}</p>
-                    <p className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</p>
-                  </div>
+              <div
+                className='flex items-center justify-between cursor-pointer'
+                onClick={() => setExpandedDate(expandedDate === date ? null : date)}
+              >
+                <div className={Styles.orderSummary}>
+                  <p className={Styles.date}>{date}</p>
+                  <p className={Styles.totalProducts}>Total products: {groupedOrders[date].length}</p>
+                  <p className={Styles.status + " " + Styles[`status${groupedOrders[date].status.replace(' ', '')}`]}>Status: {groupedOrders[date].status}</p>
                 </div>
+
                 <div>
-                  <NextIcon />
+                  {expandedDate === date ? <DownIcon /> : <NextIcon />}
                 </div>
               </div>
+              {expandedDate === date && (
+                <div className={Styles.orderDetails}>
+                  {groupedOrders[date].map((order) => (
+                    <div
+                      key={order.orderNumber}
+                      className={Styles.individualOrderDetail}
+                      onClick={() => { router.push(`/order/${order.orderNumber}`) }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-5 min-w-72">
+                          <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
+                          <div>
+                            <p className="font-semibold">{order.product}</p>
+                            <p className="text-xs text-[#666]">Order placed on {parseOrderDate(order.date)}</p>
+                            <p className={Styles[`status${order.status.replace(' ', '')}`] + " text-sm font-medium"}>{order.status}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className='pb-5'>
+                    <OrderStatusTimeline status={groupedOrders[date].status} />
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </> : <>

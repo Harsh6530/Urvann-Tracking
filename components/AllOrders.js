@@ -27,7 +27,9 @@ const Orders = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const token = useSelector(state => state.auth.userToken);
-  const [ordersData, setOrdersData] = useState([]);
+  const [ordersDeliveredData, setOrdersDeliveredData] = useState([]);
+  const [ordersPendingData, setOrdersPendingData] = useState([]);
+  const [view, setView] = useState('pending'); // State to toggle between 'pending' and 'delivered'
 
   if (!isAuthenticated) {
     router.push('/login');
@@ -45,7 +47,8 @@ const Orders = () => {
       const response = await fetchOrders(email, phone);
 
       if (response.success) {
-        setOrdersData(response.orders);
+        setOrdersPendingData(response.orders.filter(order => order.status !== 'Delivered'));
+        setOrdersDeliveredData(response.orders.filter(order => order.status === 'Delivered'));
       } else {
         console.error(response.message);
       }
@@ -62,9 +65,25 @@ const Orders = () => {
   return (
     <div className={Styles.ordersContainer}>
       <h2 className={Styles.header}>All Orders</h2>
-      {ordersData.length > 0 ?
+
+      <div className={Styles.navButtons}>
+        <button
+          className={`${Styles.navButton} ${view === 'pending' ? Styles.active : ''}`}
+          onClick={() => setView('pending')}
+        >
+          Pending Orders
+        </button>
+        <button
+          className={`${Styles.navButton} ${view === 'delivered' ? Styles.active : ''}`}
+          onClick={() => setView('delivered')}
+        >
+          Delivered Orders
+        </button>
+      </div>
+
+      {view === 'pending' ? (ordersPendingData.length > 0 ?
         <>
-          {ordersData.map((order) => (
+          {ordersPendingData.map((order) => (
             <div
               key={order.orderNumber}
               className={Styles.individualOrder}
@@ -88,7 +107,33 @@ const Orders = () => {
         </> : <>
           <p className='text-center'>No orders found</p>
         </>
-      }
+      ) : (ordersDeliveredData.length > 0 ?
+        <>
+          {ordersDeliveredData.map((order) => (
+            <div
+              key={order.orderNumber}
+              className={Styles.individualOrder}
+              onClick={() => router.push(`/orders/${order.orderNumber}`)}
+            >
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-5 min-w-72'>
+                  <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
+                  <div>
+                    <p className='font-semibold text-lg'>{order.product}</p>
+                    <p className='text-sm'>Order placed on {parseOrderDate(order.date)}</p>
+                    <p className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</p>
+                  </div>
+                </div>
+                <div>
+                  <NextIcon />
+                </div>
+              </div>
+            </div>
+          ))}
+        </> : <>
+          <p className='text-center'>No orders found</p>
+        </>
+      )}
     </div>
   );
 };

@@ -6,14 +6,14 @@ const OrderStatusTimeline = (props) => {
   const { status } = props;
 
   const currentStatusIndex =
-    (status === 'Delivered Failed') ?
+    (status === 'Delivery Failed') ?
       statusSteps.indexOf("Delivered") :
       statusSteps.indexOf(status);
 
-  // Handle looping status steps for 'Delivered Failed' status
+  // Handle looping status steps for 'Delivery Failed' status
   const relevantSteps =
-    (status === 'Delivered Failed') ?
-      statusSteps.slice(0, 2).concat('Delivered failed').concat(statusSteps.slice(0, 3)) :
+    (status === 'Delivery Failed') ?
+      statusSteps.slice(0, 2).concat('Delivery Failed').concat(statusSteps.slice(0, 3)) :
       statusSteps.slice(0, 3);
 
   return (
@@ -21,7 +21,7 @@ const OrderStatusTimeline = (props) => {
       {relevantSteps.map((step, index) => (
         <div
           key={step}
-          className={`${Styles.statusStep} ${index <= currentStatusIndex ? Styles.completed : ''} ${step === 'Delivered Failed' ? Styles.notDelivered : ''}`}
+          className={`${Styles.statusStep} ${index <= currentStatusIndex ? Styles.completed : ''} ${step === 'Delivery Failed' ? Styles.notDelivered : ''}`}
         >
           <div className={Styles.stepCircle}></div>
           <span className={Styles.stepLabel}>{step}</span>

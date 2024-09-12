@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import Styles from './Orders.module.css';
+import Styles from './AllOrders.module.css';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticate } from '@/server/auth-actions';

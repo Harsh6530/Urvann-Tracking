@@ -10,7 +10,7 @@ export async function fetchOrders(email, phone) {
 
         const routes = await Route.find(
             { email, shipping_address_phone: { $regex: phone.slice(-10) } },
-            'order_id created_on shipping_address_full_name line_item_name line_item_sku Pickup_Status Delivery_Status'
+            'order_id created_on shipping_address_full_name line_item_name line_item_sku Pickup_Status metafield_delivery_status'
         ).lean();
 
         if (!routes || routes.length === 0) {
@@ -34,9 +34,11 @@ export async function fetchOrders(email, phone) {
         const orders = routes.map((order) => {
             const status = order.Pickup_Status === "Not Picked"
                 ? "Order placed"
-                : order.Delivery_Status === "Not Delivered"
-                    ? "Not delivered"
-                    : "Delivered";
+                : order.metafield_delivery_status === "Z-Delivered"
+                    ? "Delivered"
+                    : order.Pickup_Status === "Picked"
+                        ? "Picked"
+                        : "Delivered Failed";
 
             // Get image URL from the photoMap using SKU
             const imgURL = photoMap[order.line_item_sku] || null;

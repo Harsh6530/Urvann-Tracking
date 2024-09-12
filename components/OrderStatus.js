@@ -7,8 +7,7 @@ import { checkAuth } from '@/redux/features/auth';
 import { authenticate } from '@/server/auth-actions';
 import { fetchOrders } from '@/server/order-actions';
 import Image from 'next/image';
-
-const statusSteps = ['Order placed', 'Picked', 'Delivered'];
+import OrderStatusTimeline from './OrderStatusTimeline';
 
 const OrderStatus = (props) => {
   const { orderId } = props;
@@ -52,17 +51,6 @@ const OrderStatus = (props) => {
     return <p className={Styles.error}>Order not found</p>;
   }
 
-  const currentStatusIndex =
-    (order.status === 'Delivered Failed') ?
-      statusSteps.indexOf("Delivered") :
-      statusSteps.indexOf(order.status);
-
-  // Handle looping status steps
-  const relevantSteps =
-    (order.status === 'Delivered Failed') ?
-      statusSteps.slice(0, 2).concat('Delivered failed').concat(statusSteps.slice(0, 3)) :
-      statusSteps.slice(0, 3);
-
   return (
     <div className={Styles.statusContainer}>
       <button className={Styles.backButton} onClick={() => { router.push('/orders') }}>
@@ -77,17 +65,7 @@ const OrderStatus = (props) => {
         <p><strong>Customer:</strong> {order.customer}</p>
         <p><strong>Status:</strong> <span className={Styles[`status${order.status.replace(' ', '')}`]}>{order.status}</span></p>
       </div>
-      <div className={Styles.statusTimeline}>
-        {relevantSteps.map((step, index) => (
-          <div
-            key={step}
-            className={`${Styles.statusStep} ${index <= currentStatusIndex ? Styles.completed : ''} ${step === 'Delivered Failed' ? Styles.notDelivered : ''}`}
-          >
-            <div className={Styles.stepCircle}></div>
-            <span className={Styles.stepLabel}>{step}</span>
-          </div>
-        ))}
-      </div>
+      <OrderStatusTimeline status={order.status} />
     </div>
   );
 };

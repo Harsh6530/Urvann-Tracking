@@ -1,0 +1,59 @@
+.loadingContainer {
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    flex-direction: column;
+    margin-top: -20px;
+}
+
+.loadingText {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2b7137;
+    margin-top: 10px;
+}
+
+/* Optional Spinner animation if preferred over pulsing effect */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2b7137;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Pulsing effect */
+.pulse {
+    width: 20px;
+    height: 20px;
+    background-color: #2b7137;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(0.8);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}

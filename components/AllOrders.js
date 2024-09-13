@@ -7,6 +7,7 @@ import { authenticate } from '@/server/auth-actions';
 import { checkAuth } from '@/redux/features/auth';
 import { fetchOrders } from '@/server/order-actions';
 import DateWiseOrders from './DateWiseOrders';
+import Loading from './Loading';
 
 const Orders = () => {
   const router = useRouter();
@@ -16,6 +17,7 @@ const Orders = () => {
   const [ordersDeliveredData, setOrdersDeliveredData] = useState([]);
   const [ordersPendingData, setOrdersPendingData] = useState([]);
   const [view, setView] = useState('pending'); // State to toggle between 'pending' and 'delivered'
+  const [loading, setLoading] = useState(true);
 
   if (!isAuthenticated) {
     router.push('/login');
@@ -41,12 +43,20 @@ const Orders = () => {
     } else {
       console.error(user.message);
     }
+
+    setLoading(false);
   }
 
   useEffect(() => {
     getOrders();
     /* eslint-disable-next-line */
   }, []);
+
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <div className={Styles.ordersContainer}>

@@ -7,6 +7,7 @@ import { checkAuth } from '@/redux/features/auth';
 import { authenticate } from '@/server/auth-actions';
 import { fetchOrders } from '@/server/order-actions';
 import { useEffect, useState } from 'react';
+import Loading from './Loading';
 
 const parseOrderDate = (date) => {
   const parsedDate = new Date(date);
@@ -32,6 +33,7 @@ const DateWiseOrderDetails = (props) => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const token = useSelector(state => state.auth.userToken);
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   if (!isAuthenticated) {
     router.push('/login');
@@ -56,12 +58,20 @@ const DateWiseOrderDetails = (props) => {
     } else {
       console.error(user.message);
     }
+
+    setLoading(false);
   }
 
   useEffect(() => {
     getOrders();
     /* eslint-disable-next-line */
   }, []);
+
+  if (loading) {
+    return (
+      <Loading />
+    )
+  }
 
   return (
     <div className={Styles.ordersContainer}>

@@ -21,7 +21,7 @@ export async function login(data) {
         }
 
         // consider only last 10 digits of phone number (excluding country code)
-        const phoneVerified = (phone === route.shipping_address_phone.slice(-10));
+        const phoneVerified = (phone == route.shipping_address_phone.slice(-10));
 
         if (!phoneVerified) {
             return {

@@ -81,13 +81,13 @@ const DateWiseOrderDetails = (props) => {
       <p className={Styles.header}>Orders on {parseOrderDate(orders[0]?.date)}</p>
       {orders.length > 0 ?
         <>
-          {orders.map((order) => (
+          {orders.map((order, i) => (
             <div
-              key={order.orderNumber}
+              key={i}
               className={Styles.individualOrder}
             >
               <div className='flex items-center gap-5 min-w-72'>
-                <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
+                {order.imgURL && <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />}
                 <div>
                   <p className='font-semibold text-lg'>{order.product}</p>
                   <p className='text-sm'>Order Number: {order.orderNumber}</p>

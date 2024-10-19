@@ -87,7 +87,10 @@ const DateWiseOrderDetails = (props) => {
               className={Styles.individualOrder}
             >
               <div className='flex items-center gap-5 min-w-72'>
-                {order.imgURL && <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />}
+                {order.imgURL ? 
+                  <Image src={order.imgURL} height={500} width={500} alt={order.product} className={Styles.productImage} />
+                  : <div className='w-[70px] text-xs text-center text-[#808080]'>Image not found</div>
+                }
                 <div>
                   <p className='font-semibold text-lg'>{order.product}</p>
                   <p className='text-sm'>Order Number: {order.orderNumber}</p>

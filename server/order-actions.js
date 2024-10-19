@@ -46,7 +46,7 @@ export async function fetchOrders(email, phone) {
             return {
                 orderNumber: order.order_id,
                 // date: order.created_on,
-                date: new Date(),
+                date: new Date(), // get today's date
                 customer: order.shipping_address_full_name,
                 product: order.line_item_name,
                 imgURL,

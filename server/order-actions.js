@@ -8,10 +8,16 @@ export async function fetchOrders(email, phone) {
     try {
         await connectDB();
 
-        const routes = await Route.find(
-            { email, shipping_address_phone: { $regex: phone.slice(-10) } },
-            'order_id created_on shipping_address_full_name line_item_name line_item_sku Pickup_Status metafield_delivery_status'
+        const response = await Route.find(
+            {
+                email,
+                /* shipping_address_phone: { $regex: phone.slice(-10) } */
+            },
+            'order_id created_on shipping_address_phone shipping_address_full_name line_item_name line_item_sku Pickup_Status metafield_delivery_status'
         ).lean();
+
+        // filter orders by phone number
+        const routes = response.filter(route => route.shipping_address_phone.toString().slice(-10) === phone.toString().slice(-10));
 
         if (!routes || routes.length === 0) {
             return {

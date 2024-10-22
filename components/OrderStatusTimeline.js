@@ -1,9 +1,19 @@
 import Styles from './OrderStatusTimeline.module.css';
 
-const statusSteps = ['Order placed', 'Picked', 'Delivered'];
-
 const OrderStatusTimeline = (props) => {
-  const { status } = props;
+  const { status, isReplacement } = props;
+
+  const statusSteps = ['', '', ''];
+
+  if (isReplacement) {
+    statusSteps[0] = 'Replacement initiated';
+    statusSteps[1] = 'Picked';
+    statusSteps[2] = 'Replacement Successful';
+  } else {
+    statusSteps[0] = 'Order placed';
+    statusSteps[1] = 'Picked';
+    statusSteps[2] = 'Delivered';
+  }
 
   const currentStatusIndex =
     (status === 'Delivery Failed') ?
@@ -13,7 +23,7 @@ const OrderStatusTimeline = (props) => {
   // Handle looping status steps for 'Delivery Failed' status
   const relevantSteps =
     (status === 'Delivery Failed') ?
-      statusSteps.slice(0, 2).concat('Delivery Failed').concat(statusSteps.slice(0, 3)) :
+      statusSteps.slice(0, 2).concat('Delivery Failed') :
       statusSteps.slice(0, 3);
 
   return (

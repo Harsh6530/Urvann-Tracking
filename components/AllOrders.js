@@ -14,9 +14,12 @@ const Orders = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const token = useSelector(state => state.auth.userToken);
-  const [ordersDeliveredData, setOrdersDeliveredData] = useState([]);
+
   const [ordersPendingData, setOrdersPendingData] = useState([]);
-  const [view, setView] = useState('pending'); // State to toggle between 'pending' and 'delivered'
+  const [ordersDeliveredData, setOrdersDeliveredData] = useState([]);
+  const [ordersReplacementData, setOrdersReplacementData] = useState([]);
+
+  const [view, setView] = useState('pending'); // State to toggle between 'pending', 'delivered' and 'replacement'
   const [loading, setLoading] = useState(true);
 
   if (!isAuthenticated) {
@@ -35,8 +38,9 @@ const Orders = () => {
       const response = await fetchOrders(email, phone);
 
       if (response.success) {
-        setOrdersPendingData(response.orders.filter(order => order.status !== 'Delivered'));
-        setOrdersDeliveredData(response.orders.filter(order => order.status === 'Delivered'));
+        setOrdersPendingData(response.orders.filter(order => order.status !== 'Delivered' && order.type !== 'Replacement'));
+        setOrdersDeliveredData(response.orders.filter(order => order.status === 'Delivered' && order.type !== 'Replacement'));
+        setOrdersReplacementData(response.orders.filter(order => order.type === 'Replacement'));
       } else {
         console.error(response.message);
       }
@@ -75,11 +79,17 @@ const Orders = () => {
         >
           Delivered Orders
         </button>
+        <button
+          className={`${Styles.navButton} ${view === 'replacement' ? Styles.active : ''}`}
+          onClick={() => setView('replacement')}
+        >
+          Replacement Orders
+        </button>
       </div>
 
-      {view === 'pending' ?
-        <DateWiseOrders orders={ordersPendingData} deliveryStatus={'pending'} /> :
-        <DateWiseOrders orders={ordersDeliveredData} deliveryStatus={'delivered'} />
+      {view === 'pending' ? <DateWiseOrders orders={ordersPendingData} deliveryStatus={'pending'} isReplacement={false} /> :
+        view === 'delivered' ? <DateWiseOrders orders={ordersDeliveredData} deliveryStatus={'delivered'} isReplacement={false} /> :
+          <DateWiseOrders orders={ordersReplacementData} isReplacement={true} />
       }
     </div>
   );

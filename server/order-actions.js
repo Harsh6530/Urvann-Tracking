@@ -13,7 +13,7 @@ export async function fetchOrders(email, phone) {
                 email,
                 /* shipping_address_phone: { $regex: phone.slice(-10) } */
             },
-            'order_id created_on shipping_address_phone shipping_address_full_name line_item_name line_item_sku Pickup_Status metafield_delivery_status'
+            'order_id created_on shipping_address_phone shipping_address_full_name line_item_name line_item_sku Pickup_Status metafield_delivery_status metafield_order_type'
         ).lean();
 
         // filter orders by phone number
@@ -39,24 +39,26 @@ export async function fetchOrders(email, phone) {
 
         const orders = routes.map((order) => {
             const status = order.Pickup_Status === "Not Picked"
-                ? "Order placed"
+                ? (order.metafield_order_type === "Replacement" ? "Replacement initiated" : "Order placed")
                 : order.metafield_delivery_status === "Z-Delivered"
                     ? "Delivered"
-                    : order.Pickup_Status === "Picked"
-                        ? "Picked"
-                        : "Delivery Failed";
+                    : order.metafield_delivery_status === "Z-Replacement Successful"
+                        ? "Replacement Successful"
+                        : order.Pickup_Status === "Picked"
+                            ? "Picked"
+                            : "Delivery Failed";
 
             // Get image URL from the photoMap using SKU
             const imgURL = photoMap[order.line_item_sku] || null;
 
             return {
                 orderNumber: order.order_id,
-                // date: order.created_on,
-                date: new Date(), // get today's date
+                date: order.created_on || new Date(), // get today's date if no date is found
                 customer: order.shipping_address_full_name,
                 product: order.line_item_name,
                 imgURL,
-                status
+                status,
+                type: order.metafield_order_type
             };
         });
 

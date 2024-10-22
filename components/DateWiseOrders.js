@@ -24,7 +24,7 @@ const getDateString = (date) => {
 }
 
 const DateWiseOrders = (props) => {
-  const { orders, deliveryStatus } = props;
+  const { orders, deliveryStatus, isReplacement } = props;
   const router = useRouter();
 
   // group orders by date
@@ -40,11 +40,19 @@ const DateWiseOrders = (props) => {
 
   // if any order is in delivered state then status is delivered
   // if any order is in picked state then status is picked
-  Object.keys(groupedOrders).forEach((date) => {
-    const status = groupedOrders[date].some((order) => order.status === 'Delivered') ? 'Delivered'
-      : groupedOrders[date].some((order) => order.status === 'Picked') ? 'Picked' : 'Order placed';
-    groupedOrders[date].status = status;
-  });
+  if (isReplacement) {
+    Object.keys(groupedOrders).forEach((date) => {
+      const status = groupedOrders[date].some((order) => order.status === 'Replacement Successful') ? 'Replacement Successful'
+        : groupedOrders[date].some((order) => order.status === 'Picked') ? 'Picked' : 'Replacement initiated';
+      groupedOrders[date].status = status;
+    });
+  } else {
+    Object.keys(groupedOrders).forEach((date) => {
+      const status = groupedOrders[date].some((order) => order.status === 'Delivered') ? 'Delivered'
+        : groupedOrders[date].some((order) => order.status === 'Picked') ? 'Picked' : 'Order placed';
+      groupedOrders[date].status = status;
+    });
+  }
 
   const [expandedDate, setExpandedDate] = useState(null);
 
@@ -74,7 +82,7 @@ const DateWiseOrders = (props) => {
               {expandedDate === date && (
                 <div className={Styles.orderDetails}>
                   <div className='py-1'>
-                    <OrderStatusTimeline status={groupedOrders[date].status} />
+                    <OrderStatusTimeline status={groupedOrders[date].status} isReplacement={isReplacement} />
                   </div>
                   <button
                     className={Styles.viewProductsButton}

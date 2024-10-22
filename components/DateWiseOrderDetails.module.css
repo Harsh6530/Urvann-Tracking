@@ -50,15 +50,17 @@
     border-radius: 8px;
 }
 
-.statusOrderplaced {
+.statusOrderplaced,
+.statusReplacementinitiated {
     color: #f4b41a;
 }
 
 .statusPicked {
-    color: #2b7137;
-}
-
-.statusDelivered {
     color: #66a766;
     /* Blend of #2b7137 and lighter green */
+}
+
+.statusDelivered,
+.statusReplacementSuccessful {
+    color: #2b7137;
 }

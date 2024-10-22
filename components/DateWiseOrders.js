@@ -38,10 +38,10 @@ const DateWiseOrders = (props) => {
     }
   });
 
-  // if all orders are in delivered state then status is delivered
+  // if any order is in delivered state then status is delivered
   // if any order is in picked state then status is picked
   Object.keys(groupedOrders).forEach((date) => {
-    const status = groupedOrders[date].every((order) => order.status === 'Delivered') ? 'Delivered'
+    const status = groupedOrders[date].some((order) => order.status === 'Delivered') ? 'Delivered'
       : groupedOrders[date].some((order) => order.status === 'Picked') ? 'Picked' : 'Order placed';
     groupedOrders[date].status = status;
   });

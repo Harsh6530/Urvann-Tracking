@@ -32,4 +32,5 @@ const routeSchema = new mongoose.Schema({
   Lock_Status: { type: String, required: true }
 }, { collection: 'route' });
 
-module.exports = mongoose.models.Route || mongoose.model('Route', routeSchema);
+// module.exports = mongoose.models.Route || mongoose.model('Route', routeSchema);
+export default routeSchema;

@@ -1,18 +1,25 @@
 "use server";
 
 import connectDB from "@/middlewares/connectDB";
-import Route from "@/models/route";
+import RouteSchema from "@/models/route";
+import OrderSchema from "@/models/orders";
 import jwt from "jsonwebtoken";
 
 export async function login(data) {
     try {
-        await connectDB();
+        const { urvannConn, storeHippoConn } = await connectDB();
 
         const { email, phone } = data;
 
-        const route = await Route.findOne({ email });
+        // // get users from urvann app
+        // const Route = urvannConn.model('Route', RouteSchema);
+        // const route = await Route.findOne({ email });
 
-        if (!route) {
+        // get users from store_hippo
+        const Order = storeHippoConn.model('Order', OrderSchema);
+        const ordersPlaced = await Order.findOne({ "data.email": email });
+
+        if (/* !route && */ !ordersPlaced) {
             return {
                 success: false,
                 status: 401,
@@ -21,7 +28,9 @@ export async function login(data) {
         }
 
         // consider only last 10 digits of phone number (excluding country code)
-        const phoneVerified = (phone == route.shipping_address_phone.slice(-10));
+        const phoneVerified =
+            // (route && phone == route.shipping_address_phone.slice(-10)) ||
+            (ordersPlaced && phone == ordersPlaced.data.phone.slice(-10));
 
         if (!phoneVerified) {
             return {
@@ -31,7 +40,7 @@ export async function login(data) {
             }
         }
 
-        const token = jwt.sign({ routeId: route._id, email, phone }, process.env.JWT_SECRET, { expiresIn: "2d" });
+        const token = jwt.sign({ userId: ordersPlaced.data.user_id, email, phone }, process.env.JWT_SECRET, { expiresIn: "2d" });
 
         return {
             success: true,

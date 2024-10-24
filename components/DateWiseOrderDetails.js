@@ -94,7 +94,6 @@ const DateWiseOrderDetails = (props) => {
                 }
                 <div>
                   <p className='font-semibold text-lg'>{order.product}</p>
-                  <p className='text-sm'>Order Number: {order.orderNumber}</p>
                   <p className={Styles[`status${order.status.replace(' ', '')}`] + " font-semibold"}>Status: {order.status}</p>
                 </div>
               </div>

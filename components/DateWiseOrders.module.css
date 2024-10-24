@@ -37,7 +37,8 @@
     border-left: 2px solid #ccc;
 }
 
-.statusOrderplaced {
+.statusOrderplaced,
+.statusReplacementinitiated {
     color: #f4b41a;
 }
 
@@ -46,7 +47,8 @@
     /* Blend of #2b7137 and lighter green */
 }
 
-.statusDelivered {
+.statusDelivered,
+.statusReplacementSuccessful {
     color: #2b7137;
 }
 

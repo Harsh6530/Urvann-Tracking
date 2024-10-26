@@ -79,6 +79,7 @@ const OrderSchema = new mongoose.Schema({
     fulfillment_status: String,
     notes: [String],
     order_date: Date,
+    txn_id: String,
   },
   receivedAt: Date,
 }, { timestamps: true });

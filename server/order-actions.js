@@ -62,7 +62,9 @@ export async function fetchOrders(email, phone) {
                     product: item.name,
                     imgURL: photoMap[item.sku] || null,
                     status: "Order placed",
-                    type: ""
+                    type: "",
+                    txn_id: order.data.txn_id,
+                    sku: item.sku
                 };
             });
 
@@ -82,11 +84,31 @@ export async function fetchOrders(email, phone) {
 
         const ordersFlat = [].concat(...orders); // convert 2D array to 1D array
 
+        // get orders status from Urvann app
+        const Route = urvannConn.model('Route', RouteSchema);
+        const updateOrderStatus = async (order) => {
+            const route = await Route.findOne({ txn_id: order.txn_id, line_item_sku: order.sku });
+            if (route) {
+                order.status = route.Pickup_Status === "Not Picked"
+                    ? (route.metafield_order_type === "Replacement" ? "Replacement initiated" : "Order placed")
+                    : route.metafield_delivery_status === "Z-Delivered"
+                        ? "Delivered"
+                        : route.metafield_delivery_status === "Z-Replacement Successful"
+                            ? "Replacement Successful"
+                            : route.Pickup_Status === "Picked"
+                                ? "Picked"
+                                : "Delivery Failed";
+            }
+            return order;
+        };
+
+        const updatedOrders = await Promise.all(ordersFlat.map(updateOrderStatus));
+
         return {
             success: true,
             status: 200,
             message: "Orders fetched",
-            orders: ordersFlat
+            orders: updatedOrders
         };
     } catch (error) {
         return {

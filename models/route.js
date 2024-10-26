@@ -29,7 +29,8 @@ const routeSchema = new mongoose.Schema({
   Pickup_Status: { type: String, required: true },
   metafield_delivery_status: { type: String, required: true },
   metafield_order_type: { type: String, required: true },
-  Lock_Status: { type: String, required: true }
+  Lock_Status: { type: String, required: true },
+  txn_id: { type: String, required: true },
 }, { collection: 'route' });
 
 // module.exports = mongoose.models.Route || mongoose.model('Route', routeSchema);

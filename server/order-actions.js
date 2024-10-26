@@ -63,7 +63,7 @@ export async function fetchOrders(email, phone) {
                     imgURL: photoMap[item.sku] || null,
                     status: "Order placed",
                     type: "",
-                    txn_id: order.data.txn_id,
+                    order_id: parseInt(order.data.order_id),
                     sku: item.sku
                 };
             });
@@ -87,7 +87,7 @@ export async function fetchOrders(email, phone) {
         // get orders status from Urvann app
         const Route = urvannConn.model('Route', RouteSchema);
         const updateOrderStatus = async (order) => {
-            const route = await Route.findOne({ txn_id: order.txn_id, line_item_sku: order.sku });
+            const route = await Route.findOne({ order_id: order.order_id, line_item_sku: order.sku });
             if (route) {
                 order.status = route.Pickup_Status === "Not Picked"
                     ? (route.metafield_order_type === "Replacement" ? "Replacement initiated" : "Order placed")

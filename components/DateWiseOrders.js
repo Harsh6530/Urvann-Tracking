@@ -27,6 +27,8 @@ const DateWiseOrders = (props) => {
   const { orders, deliveryStatus, isReplacement } = props;
   const router = useRouter();
 
+  orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+
   // group orders by date
   const groupedOrders = {};
   orders.forEach((order) => {

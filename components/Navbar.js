@@ -43,12 +43,13 @@ const Navbar = () => {
           >
             Sign Out
           </button> :
-          <button
-            className="bg-[#2b7137] hover:bg-[#20522b] text-white font-bold py-1 sm:py-2 px-2 sm:px-4 rounded"
-            onClick={() => { router.push('/login') }}
-          >
-            Login
-          </button>
+          <></>
+          // <button
+          //   className="bg-[#2b7137] hover:bg-[#20522b] text-white font-bold py-1 sm:py-2 px-2 sm:px-4 rounded"
+          //   onClick={() => { router.push('/login') }}
+          // >
+          //   Login
+          // </button>
         }
       </div>
     </div>

@@ -12,13 +12,24 @@ const Login = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const error = useSelector(state => state.auth.error);
 
+  const [credentials, setCredentials] = useState({ email: '', phone: '' });
+  const [errorMsg, setErrorMsg] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+
   if (isAuthenticated) {
     router.push('/orders');
   }
 
-  // Check authentication status on component mount
   useEffect(() => {
+    // Check authentication status on component mount
     dispatch(checkAuth());
+
+    // Load saved credentials if they exist
+    const savedCredentials = localStorage.getItem('credentials');
+    if (savedCredentials) {
+      setCredentials(JSON.parse(savedCredentials));
+      setRememberMe(true);
+    }
   }, [dispatch]);
 
   const handleLogin = async () => {
@@ -34,12 +45,17 @@ const Login = () => {
       }
     } else {
       dispatch(loginSuccess({ token: response.token }));
+
+      // Save credentials if "Remember Me" is checked
+      if (rememberMe) {
+        localStorage.setItem('credentials', JSON.stringify(credentials));
+      } else {
+        localStorage.removeItem('credentials');
+      }
+
       router.push('/orders');
     }
   };
-
-  const [credentials, setCredentials] = useState({ email: '', phone: '' });
-  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,39 +72,66 @@ const Login = () => {
   return (
     <div className={Styles.loginContainer}>
       <form onSubmit={handleSubmit} className={Styles.loginForm}>
-        <p className="text-3xl text-center text-[#2b7137] mt-2 mb-5" style={{ fontFamily: 'fantasy' }}>
+        <p
+          className="text-3xl text-center text-[#2b7137] mt-2 mb-5"
+          style={{ fontFamily: 'fantasy' }}
+        >
           Login
         </p>
 
         {errorMsg && <p className={Styles.errorMessage}>{errorMsg}</p>}
 
         <div className={Styles.formGroup}>
-          <label htmlFor="email" className={Styles.label}>Email:</label>
+          <label htmlFor="email" className={Styles.label}>
+            Email:
+          </label>
           <input
             type="text"
             id="email"
             name="email"
             value={credentials.email}
-            onChange={(event) => setCredentials({ ...credentials, email: event.target.value })}
+            onChange={(event) =>
+              setCredentials({ ...credentials, email: event.target.value })
+            }
             className={Styles.input}
             required
           />
         </div>
 
         <div className={Styles.formGroup}>
-          <label htmlFor="phone" className={Styles.label}>Phone Number:</label>
+          <label htmlFor="phone" className={Styles.label}>
+            Phone Number:
+          </label>
           <input
             type="text"
             id="phone"
             name="phone"
             value={credentials.phone}
-            onChange={(event) => setCredentials({ ...credentials, phone: event.target.value })}
+            onChange={(event) =>
+              setCredentials({ ...credentials, phone: event.target.value })
+            }
             className={Styles.input}
             required
           />
         </div>
 
-        <button type="submit" className={Styles.loginButton}>Login</button>
+        <div className={Styles.formGroup}>
+          <label className={Styles.label}>
+          <div className={Styles.rememberMeContainer}>
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(event) => setRememberMe(event.target.checked)}
+              id="rememberMe"
+            />
+            <label htmlFor="rememberMe">Remember Me</label>
+          </div>
+          </label>
+        </div>
+
+        <button type="submit" className={Styles.loginButton}>
+          Login
+        </button>
       </form>
     </div>
   );

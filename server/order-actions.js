@@ -6,6 +6,7 @@ import photoSchema from "@/models/photo";
 import OrderSchema from "@/models/orders";
 
 export async function fetchOrders(email, phone) {
+    console.log('Fetching orders for email:', email, 'and phone:', phone);  // Log input parameters
     try {
         const { urvannConn, storeHippoConn } = await connectDB();
 
@@ -45,6 +46,7 @@ export async function fetchOrders(email, phone) {
         }, {});
 
         const orders = ordersPlaced.map((order) => {
+            console.log('Order items:', order.data.items);  // Log order items
             // const status = order.Pickup_Status === "Not Picked"
             //     ? (order.metafield_order_type === "Replacement" ? "Replacement initiated" : "Order placed")
             //     : order.metafield_delivery_status === "Z-Delivered"
@@ -56,6 +58,7 @@ export async function fetchOrders(email, phone) {
             //                 : "Delivery Failed";
 
             return order.data.items.map((item) => {
+                console.log('Order ID:', order.data.order_id, 'SKU:', item.sku);  // Log order_id and sku for each item
                 return {
                     date: order.receivedAt || new Date(), // get today's date if no date is found
                     customer: order.data.billing_address.full_name,
@@ -86,9 +89,14 @@ export async function fetchOrders(email, phone) {
 
         // get orders status from Urvann app
         const Route = urvannConn.model('Route', RouteSchema);
+        const allRoutes = await Route.find({});
+        console.log('All routes in database:', allRoutes.map(route => ({ order_id: route.order_id, sku: route.line_item_sku })));  // Log all order_ids and skus in the Route database
+
         const updateOrderStatus = async (order) => {
-            const route = await Route.findOne({ order_id: order.order_id, line_item_sku: order.sku });
+            console.log('Converted order_id:', parseInt(order.order_id, 10), 'SKU:', order.sku);  // Log converted order_id and sku before query
+            const route = await Route.findOne({ order_id: parseInt(order.order_id, 10), line_item_sku: order.sku });
             if (route) {
+                console.log('Route found for order_id:', order.order_id, 'and sku:', order.sku);  // Log when route is found
                 order.status = route.Pickup_Status === "Not Picked"
                     ? (route.metafield_order_type === "Replacement" ? "Replacement initiated" : "Order placed")
                     : route.metafield_delivery_status === "Z-Delivered"
@@ -98,6 +106,9 @@ export async function fetchOrders(email, phone) {
                             : route.Pickup_Status === "Picked"
                                 ? "Picked"
                                 : "Delivery Failed";
+                console.log('Updated order status to:', order.status);  // Log updated status
+            } else {
+                console.log('No route found for order_id:', order.order_id, 'and sku:', order.sku);  // Log when no route is found
             }
             return order;
         };

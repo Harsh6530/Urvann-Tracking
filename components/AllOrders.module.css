@@ -31,6 +31,9 @@
     color: #333;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
 }
 
 .navButton:hover {

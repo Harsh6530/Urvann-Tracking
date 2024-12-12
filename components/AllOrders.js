@@ -64,26 +64,26 @@ const Orders = () => {
 
   return (
     <div className={Styles.ordersContainer}>
-      <h2 className={Styles.header}>All Orders</h2>
+      <h2 className={Styles.header}>Your Orders</h2>
 
       <div className={Styles.navButtons}>
         <button
           className={`${Styles.navButton} ${view === 'pending' ? Styles.active : ''}`}
           onClick={() => setView('pending')}
         >
-          Pending Orders
+          Live Orders
         </button>
         <button
           className={`${Styles.navButton} ${view === 'delivered' ? Styles.active : ''}`}
           onClick={() => setView('delivered')}
         >
-          Delivered Orders
+          Delivered
         </button>
         <button
           className={`${Styles.navButton} ${view === 'replacement' ? Styles.active : ''}`}
           onClick={() => setView('replacement')}
         >
-          Replacement Orders
+          Refund/Replacement
         </button>
       </div>
 

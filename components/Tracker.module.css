@@ -1,0 +1,16 @@
+.dot{
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    border-radius: 25px;
+}
+.bar{
+    width: 2px;
+    height: calc((100vh - 108px)/6);
+    background-color: green;
+}
+.state{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

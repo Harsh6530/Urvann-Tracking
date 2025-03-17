@@ -36,7 +36,7 @@ const Orders = () => {
     if (user.success) {
       const { email, phone } = user.data;
       const response = await fetchOrders(email, phone);
-
+      console.log(response)
       if (response.success) {
         setOrdersPendingData(response.orders.filter(order => order.status !== 'Delivered' && order.type !== 'Replacement'));
         setOrdersDeliveredData(response.orders.filter(order => order.status === 'Delivered' && order.type !== 'Replacement'));

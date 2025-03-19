@@ -29,8 +29,6 @@ const DateWiseOrders = (props) => {
 
   orders.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const txn_id = orders[0].txn_id;
-
   // group orders by date
   const groupedOrders = {};
   orders.forEach((order) => {
@@ -60,6 +58,8 @@ const DateWiseOrders = (props) => {
 
   const [expandedDate, setExpandedDate] = useState(null);
 
+  console.log(groupedOrders)
+
   return (
     <div>
       {(orders.length > 0 ?
@@ -68,7 +68,7 @@ const DateWiseOrders = (props) => {
             <div
               key={date}
               className={Styles.individualOrder}
-              onClick={(()=>{router.push(`/orders/${txn_id}`)})}
+              onClick={(()=>{router.push(`/orders/${groupedOrders[date][0].txn_id}`)})}
             >
               <div
                 className='flex items-center justify-between cursor-pointer'

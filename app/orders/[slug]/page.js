@@ -50,7 +50,7 @@ const Page = ({ params }) => {
 
   useEffect(() => {
     getDetails();
-    const interval = setInterval(getDetails, 15000);
+    const interval = setInterval(getDetails, 5000);
 
     return () => clearInterval(interval);
   });
@@ -67,10 +67,12 @@ const Page = ({ params }) => {
           <span>₹ {info?.total}</span> |{" "}
           <span>
             {info?.formattedDate} At {info?.formattedTime}
-          </span>
+          </span>{" "}
+          <span>{info.status}</span>
         </p>
         <div className={styles.tracker}>
-            <Tracker state={info.status}/>
+            <Tracker state={info.status} tracker={info.tracker}/>
+            <div className={styles.adjust}></div>
         </div>
       </div>
     </div>

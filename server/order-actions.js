@@ -4,6 +4,7 @@ import connectDB from "@/middlewares/connectDB";
 import RouteSchema from "@/models/route";
 import photoSchema from "@/models/photo";
 import OrderSchema from "@/models/orders";
+import { data } from "autoprefixer";
 
 export async function fetchOrders(email, phone) {
   console.log("Fetching orders for email:", email, "and phone:", phone); // Log input parameters
@@ -99,7 +100,7 @@ export async function fetchOrders(email, phone) {
     const ordersFlat = [].concat(...orders); // convert 2D array to 1D array
 
     // get orders status from Urvann app
-    // const Route = urvannConn.model("Route", RouteSchema);
+    const Route = urvannConn.model("Route", RouteSchema);
     // const allRoutes = await Route.find({});
     // console.log(
     //   "All routes in database:",
@@ -220,6 +221,7 @@ export async function fetchOrderByTxn(txn_id) {
       second: "2-digit",
       hour12: true,
     });
+    const tracker = response[0].data.tracker;
 
     return {
       status: 200,
@@ -229,6 +231,7 @@ export async function fetchOrderByTxn(txn_id) {
         total,
         formattedDate,
         formattedTime,
+        tracker,
       },
     };
   } catch (error) {

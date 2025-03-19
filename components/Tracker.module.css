@@ -14,3 +14,14 @@
     flex-direction: column;
     align-items: center;
 }
+.dotContainer{
+    position: relative;
+    align-items: center;
+}
+.dotContainer span{
+    position: absolute;
+    width: 120px;
+    bottom:0;
+    margin-left: 40px;
+}
+

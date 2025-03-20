@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { fetchOrderByTxn } from "@/server/order-actions";
 import styles from "./page.module.css";
 import Tracker from "@/components/Tracker";
+import mapping from "@/Utils/StateMapping"
 
 const Page = ({ params }) => {
   const router = useRouter();
@@ -48,6 +49,19 @@ const Page = ({ params }) => {
     }
   };
 
+  const getNextDayParts = (formattedDate) => {
+    if (!formattedDate) return { month: "", day: "", year: "" };
+  
+    const currentDate = new Date(formattedDate);
+    currentDate.setDate(currentDate.getDate() + 1); 
+  
+    return {
+      month: currentDate.toLocaleDateString("en-US", { month: "short" }), // "Mar"
+      day: currentDate.toLocaleDateString("en-US", { day: "2-digit" }),    // "20"
+      year: currentDate.toLocaleDateString("en-US", { year: "numeric" })   // "2025"
+    };
+  };
+
   useEffect(() => {
     getDetails();
     const interval = setInterval(getDetails, 5000);
@@ -57,22 +71,34 @@ const Page = ({ params }) => {
 
   if (!info) return <Loading />;
 
+  const { month, day, year } = getNextDayParts(info?.formattedDate);
+
   return (
     <div className={styles.container}>
       <div className={styles.details}>
-        <p>
-          Transaction ID: <b>{txn_id}</b>
-        </p>
-        <p>
-          <span>₹ {info?.total}</span> |{" "}
-          <span>
-            {info?.formattedDate} At {info?.formattedTime}
-          </span>{" "}
-          <span>{info.status}</span>
-        </p>
+        <div className={styles.orderInfo}>
+          <p className={styles.estimate}>ESTIMATED DELIVERY DATE</p>
+          <span className={styles.day}>{day}</span>
+          {" "}
+          <span className={styles.month}>{month},</span>
+          {" "}
+          <span className={styles.year}>{year}</span>
+          <p>
+            Transaction ID: <b>{txn_id}</b>
+          </p>
+          <p>
+            <b>₹ {parseFloat(info?.total?.toFixed(2))}</b>
+          </p>
+          {" "}
+          <p style={{marginTop:"1rem", fontSize:"1rem", fontWeight:600}}>Order Status</p>
+          <span className={styles.order_status}>{info.status}</span>
+        </div>
         <div className={styles.tracker}>
-            <Tracker state={info.status} tracker={info.tracker}/>
-            <div className={styles.adjust}></div>
+          <Tracker
+            className={styles.track}
+            state={info.status}
+            tracker={info.tracker}
+          />
         </div>
       </div>
     </div>

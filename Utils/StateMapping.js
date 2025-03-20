@@ -2,6 +2,7 @@ export const mapping = {
   "Not Picked": "Order Placed",
   "Picking Up": "Picking Up",
   "In-Route": "Out for Delivery",
+  "Z-Delivered": "Delivered",
   "Close": "Delivered",
   "Z-Replacement Successful": "Replacement Done",
   "A-Delivery Failed (CNR)": "Delivery Failed",

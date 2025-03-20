@@ -63,6 +63,7 @@ const OrderSchema = new mongoose.Schema(
       phone: { type: String, index: true }, // Index phone
       user_id: { type: String, index: true }, // Index user_id
       discount_total: Number,
+      tracker: { type: [String], default: [] },
       shipping_total: Number,
       shipping_method_name: String,
       currency: {

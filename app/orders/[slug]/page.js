@@ -16,6 +16,7 @@ const Page = ({ params }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.userToken);
+
   const [info, setInfo] = useState(null);
 
   const txn_id = params.slug;
@@ -92,6 +93,9 @@ const Page = ({ params }) => {
           {" "}
           <p style={{marginTop:"1rem", fontSize:"1rem", fontWeight:600}}>Order Status</p>
           <span className={styles.order_status}>{mapping[info.status]}</span>
+        </div>
+        <div className={styles.productDetails}>
+          
         </div>
         <div className={styles.tracker}>
           <Tracker

@@ -34,7 +34,12 @@ const Dot = ({ state, rider_name, rider_number }) => {
             <br />
             Rider:{rider_name}
             <br />
-            No:<a href={`tel:${rider_number}`} className="text-blue-600 underline">{rider_number}</a>
+            No:
+            <a
+              href={`tel:${rider_number}`}
+              className="text-blue-600 underline">
+              {rider_number}
+            </a>
           </p>
         ) : state === "Delivered" ? (
           <p>Your Order is Delivered</p>
@@ -62,28 +67,31 @@ const Tracker = ({ tracker, stamps, rider_name, rider_number }) => {
 
   return (
     <div className={styles.tracker}>
-      {tracker.slice(0, visibleSteps).map((step, idx) => {
-        return (
-          <div
-            key={idx}
-            className={styles.state}>
-            <>
-              <Dot
-                state={mapping[step]}
-                isActive={idx === visibleSteps - 1}
-                rider_name={rider_name}
-                rider_number={rider_number}
-              />{" "}
-              <div className={styles.timeStamp}>
-                {" "}
-                <p>{new Date(stamps[idx]).toLocaleDateString()}</p>{" "}
-                <p>{new Date(stamps[idx]).toLocaleTimeString()}</p>
+      {!tracker || tracker.length === 0 || !stamps || stamps.length === 0
+        ? null
+        : tracker.slice(0, visibleSteps).map((step, idx) => {
+            return (
+              <div
+                key={idx}
+                className={styles.state}>
+                <>
+                  <Dot
+                    state={mapping[step]}
+                    isActive={idx === visibleSteps - 1}
+                    rider_name={rider_name}
+                    rider_number={rider_number}
+                  />
+                  {stamps[idx] && (
+                    <div className={styles.timeStamp}>
+                      <p>{new Date(stamps[idx]).toLocaleDateString()}</p>
+                      <p>{new Date(stamps[idx]).toLocaleTimeString()}</p>
+                    </div>
+                  )}
+                </>
+                {idx < visibleSteps - 1 && <Bar />}
               </div>
-            </>
-            {idx < visibleSteps - 1 && <Bar />}
-          </div>
-        );
-      })}
+            );
+          })}
     </div>
   );
 };

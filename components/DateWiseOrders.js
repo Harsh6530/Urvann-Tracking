@@ -50,7 +50,7 @@ const DateWiseOrders = (props) => {
     });
   } else {
     Object.keys(groupedOrders).forEach((date) => {
-      const status = groupedOrders[date].some((order) => order.status === 'Delivered') ? 'Delivered'
+      const status = groupedOrders[date].some((order) => order.status === 'Close') ? 'Delivered'
         : groupedOrders[date].some((order) => order.status === 'Picked') ? 'Picked' : 'Order placed';
       groupedOrders[date].status = status;
     });

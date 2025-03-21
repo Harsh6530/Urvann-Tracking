@@ -22,8 +22,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      style={{ flex: 1 }}>
       <body
+        style={{ flex: 1 }}
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <StatusUpdateProvider />
         <StoreProvider>

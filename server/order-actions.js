@@ -57,6 +57,7 @@ export async function fetchOrders(email, phone) {
 
     const orders = ordersPlaced.map((order) => {
       const txn_id = order.data.txn_id;
+      const status =order.data.status;
       console.log("Order items:", order.data.items); // Log order items
       // const status = order.Pickup_Status === "Not Picked"
       //     ? (order.metafield_order_type === "Replacement" ? "Replacement initiated" : "Order placed")
@@ -75,7 +76,7 @@ export async function fetchOrders(email, phone) {
           customer: order.data.billing_address.full_name,
           product: item.name,
           imgURL: photoMap[item.sku] || null,
-          status: "Order placed",
+          status: status,
           type: "",
           order_id: parseInt(order.data.order_id),
           sku: item.sku,
@@ -152,13 +153,13 @@ export async function fetchOrders(email, phone) {
     //   return order;
     // };
 
-    const updatedOrders = await Promise.all(ordersFlat);
+    // const updatedOrders = await Promise.all(ordersFlat).lean();
 
     return {
       success: true,
       status: 200,
       message: "Orders fetched",
-      orders: updatedOrders,
+      orders: ordersFlat,
     };
   } catch (error) {
     return {
@@ -221,8 +222,10 @@ export async function fetchOrderByTxn(txn_id) {
       second: "2-digit",
       hour12: true,
     });
+    const rider_name=response[0].data.Rider_Name;
+    const rider_number=response[0].data.rider_number;
     const tracker = response[0].data.tracker;
-
+    const trackerStamp = response[0].data.trackerStamp;
     return {
       status: 200,
       success: true,
@@ -232,6 +235,9 @@ export async function fetchOrderByTxn(txn_id) {
         formattedDate,
         formattedTime,
         tracker,
+        trackerStamp,
+        rider_name,
+        rider_number,
       },
     };
   } catch (error) {

@@ -34,7 +34,6 @@ const Login = () => {
 
   const handleLogin = async () => {
     const response = await login(credentials);
-
     if (response.success === false) {
       dispatch(loginFailure({ error: response.message }));
       if (response.status === 401) {
@@ -46,7 +45,6 @@ const Login = () => {
     } else {
       dispatch(loginSuccess({ token: response.token }));
 
-      // Save credentials if "Remember Me" is checked
       if (rememberMe) {
         localStorage.setItem('credentials', JSON.stringify(credentials));
       } else {

@@ -64,6 +64,7 @@ const OrderSchema = new mongoose.Schema(
       user_id: { type: String, index: true }, // Index user_id
       discount_total: Number,
       tracker: { type: [String], default: [] },
+      trackerStamp: { type: [Date], default: [] },
       shipping_total: Number,
       shipping_method_name: String,
       currency: {

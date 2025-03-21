@@ -10,3 +10,10 @@ export const mapping = {
   "Z-Delivery Failed (customer cancelled)": "Delivery Failed",
   "A-Delivery Failed (rider side)": "Delivery Failed",
 };
+
+export const failureStates = [
+  "A-Delivery Failed (CNR)",
+  "A-Delivery failed (Rescheduled)",
+  "Z-Delivery Failed (customer cancelled)",
+  "A-Delivery Failed (rider side)",
+];

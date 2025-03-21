@@ -13,8 +13,9 @@ export async function login(data) {
 
         // Get users from store_hippo
         const Order = storeHippoConn.model("Order", OrderSchema);
-        const ordersPlaced = await Order.findOne({ "data.email": email }).lean(); // Using .lean()
 
+        const ordersPlaced = await Order.findOne({ "data.email": email }).lean();
+        
         if (!ordersPlaced) {
             return {
                 success: false,
@@ -22,9 +23,9 @@ export async function login(data) {
                 message: "Invalid Credentials",
             };
         }
-
+        
         // Consider only last 10 digits of phone number (excluding country code)
-        const phoneVerified = phone == ordersPlaced.data.phone.slice(-10);
+        const phoneVerified = phone == ordersPlaced.data.shipping_address.phone.slice(-10);
 
         if (!phoneVerified) {
             return {
@@ -39,6 +40,8 @@ export async function login(data) {
             process.env.JWT_SECRET,
             { expiresIn: "2d" }
         );
+
+        console.log(token);
 
         return {
             success: true,

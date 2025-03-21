@@ -38,8 +38,8 @@ const Orders = () => {
       const response = await fetchOrders(email, phone);
       console.log(response)
       if (response.success) {
-        setOrdersPendingData(response.orders.filter(order => order.status !== 'Delivered' && order.type !== 'Replacement'));
-        setOrdersDeliveredData(response.orders.filter(order => order.status === 'Delivered' && order.type !== 'Replacement'));
+        setOrdersPendingData(response.orders.filter(order => order.status !== 'Close' && order.type !== 'Replacement'));
+        setOrdersDeliveredData(response.orders.filter(order => order.status === 'Close' && order.type !== 'Replacement'));
         setOrdersReplacementData(response.orders.filter(order => order.type === 'Replacement'));
       } else {
         console.error(response.message);

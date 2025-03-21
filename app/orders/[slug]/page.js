@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { fetchOrderByTxn } from "@/server/order-actions";
 import styles from "./page.module.css";
 import Tracker from "@/components/Tracker";
-import mapping from "@/Utils/StateMapping"
+import{mapping} from "@/Utils/StateMapping"
 
 const Page = ({ params }) => {
   const router = useRouter();
@@ -91,13 +91,16 @@ const Page = ({ params }) => {
           </p>
           {" "}
           <p style={{marginTop:"1rem", fontSize:"1rem", fontWeight:600}}>Order Status</p>
-          <span className={styles.order_status}>{info.status}</span>
+          <span className={styles.order_status}>{mapping[info.status]}</span>
         </div>
         <div className={styles.tracker}>
           <Tracker
             className={styles.track}
             state={info.status}
             tracker={info.tracker}
+            stamps={info.trackerStamp}
+            rider_name={info.rider_name}
+            rider_number={info.rider_number}
           />
         </div>
       </div>

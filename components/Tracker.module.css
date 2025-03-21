@@ -21,6 +21,7 @@
     border-radius: 25px;
     animation-name: show;
     animation-duration: 1s;
+    
 }
 .bar{
     width: 2px;
@@ -44,6 +45,18 @@
     width: 120px;
     bottom:-5px;
     margin-left: 40px;
+}
+
+.timeStamp{
+    position:absolute;
+    font-size: 0.5rem;
+    color: rgb(64, 64, 64);
+    width: 50vw;
+    right: -20%;
+    margin-top: 11px;
+}
+.timeStamp p{
+    display: inline-block;
 }
 
 @media(max-width:640px){

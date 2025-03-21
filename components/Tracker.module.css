@@ -1,0 +1,78 @@
+@keyframes grow{
+    0%{
+        height:0;
+    }
+    100%{
+        height:calc((100vh - 108px) / 8);
+    }
+}
+@keyframes show{
+    0%{
+        opacity:0;
+    }
+    100%{
+        opacity:1
+    }
+}
+.dot{
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    border-radius: 25px;
+    animation-name: show;
+    animation-duration: 1s;
+    
+}
+.bar{
+    width: 2px;
+    height: calc((100vh - 108px) / 6);
+    background-color: green;
+    position:relative;
+    animation-name: grow;
+    animation-duration: 1s;
+}
+.state{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.dotContainer{
+    position: relative;
+    align-items: center;
+}
+.dotContainer span{
+    position: absolute;
+    width: 120px;
+    bottom:-5px;
+    margin-left: 40px;
+}
+
+.timeStamp{
+    position:absolute;
+    font-size: 0.5rem;
+    color: rgb(64, 64, 64);
+    width: 50vw;
+    right: -20%;
+    margin-top: 11px;
+}
+.timeStamp p{
+    display: inline-block;
+}
+
+@media(max-width:640px){
+    .dot{
+        width: 10px;
+        height: 10px;
+    }
+    .bar{
+        height: calc((100vh - 108px) / 8);
+    }
+    .dot p{
+        font-size: 0.6rem;
+        color: rgb(64, 64, 64);
+        position:absolute;
+        left: 2.4rem;
+        top:100%;
+        width: 150px;
+    }
+}

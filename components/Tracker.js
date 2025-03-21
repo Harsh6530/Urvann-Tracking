@@ -1,0 +1,91 @@
+"use client";
+
+import styles from "./Tracker.module.css";
+import { useEffect, useState, ReactNode } from "react";
+import { mapping, failureStates } from "@/Utils/StateMapping";
+
+// const Delayed = ({ children, wait = 1000 }) => {
+//   const [show, setShow] = useState(false);
+
+//   useEffect(() => {
+//     const timer = setTimeout(() => {
+//       setShow(true);
+//     }, wait);
+//     return () => clearTimeout(timer);
+//   }, [wait]);
+
+//   return show ? <>{children}</> : null;
+// };
+
+const Dot = ({ state, rider_name, rider_number }) => {
+  const isFailed = failureStates.includes(state);
+  return (
+    <div className={styles.dotContainer}>
+      <div
+        className={styles.dot}
+        style={{ backgroundColor: isFailed ? "red" : "green" }}>
+        {state === "Order Placed" ? (
+          <p>Your Order Has been placed</p>
+        ) : state === "Picking Up" ? (
+          <p>Your Order is being picked up</p>
+        ) : state === "Out for Delivery" ? (
+          <p>
+            Your Order is out for Delivery
+            <br />
+            Rider:{rider_name}
+            <br />
+            No:<a href={`tel:${rider_number}`} className="text-blue-600 underline">{rider_number}</a>
+          </p>
+        ) : state === "Delivered" ? (
+          <p>Your Order is Delivered</p>
+        ) : (
+          ""
+        )}
+      </div>
+      <span>{state}</span>
+    </div>
+  );
+};
+
+const Bar = ({ idx, total }) => {
+  return <div className={styles.bar}></div>;
+};
+
+const Tracker = ({ tracker, stamps, rider_name, rider_number }) => {
+  const [visibleSteps, setVisibleSteps] = useState(0);
+  useEffect(() => {
+    if (visibleSteps < tracker.length) {
+      const timer = setTimeout(() => setVisibleSteps(visibleSteps + 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [visibleSteps, tracker.length]);
+
+  return (
+    <div className={styles.tracker}>
+      {tracker.slice(0, visibleSteps).map((step, idx) => {
+        return (
+          <div
+            key={idx}
+            className={styles.state}>
+            <>
+              <Dot
+                state={mapping[step]}
+                isActive={idx === visibleSteps - 1}
+                rider_name={rider_name}
+                rider_number={rider_number}
+              />{" "}
+              <div className={styles.timeStamp}>
+                {" "}
+                <p>{new Date(stamps[idx]).toLocaleDateString()}</p>{" "}
+                <p>{new Date(stamps[idx]).toLocaleTimeString()}</p>
+              </div>
+            </>
+            {idx < visibleSteps - 1 && <Bar />}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default Tracker;

@@ -8,7 +8,7 @@ const StatusUpdateProvider = () => {
     const fetchStatus = async () => {
       try {
         const response = await axios.post(
-          "http://http://13.127.231.132:5001/api/TrackerStatusUpdate"
+          "http://43.205.38.24:5001/api/TrackerStatusUpdate"
         );
       } catch (error) {
         console.error("Error fetching status:", error);

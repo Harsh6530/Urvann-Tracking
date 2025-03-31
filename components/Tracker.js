@@ -18,6 +18,7 @@ import { mapping, failureStates } from "@/Utils/StateMapping";
 // };
 
 const Dot = ({ state, rider_name, rider_number }) => {
+  console.log(state);
   const isFailed = failureStates.includes(state);
   return (
     <div className={styles.dotContainer}>
@@ -83,7 +84,7 @@ const Tracker = ({ tracker, stamps, rider_name, rider_number }) => {
                   />
                   {stamps[idx] && (
                     <div className={styles.timeStamp}>
-                      <p>{new Date(stamps[idx]).toLocaleDateString()}</p>
+                      <p>{new Date(stamps[idx]).toLocaleDateString()}</p>{" "}
                       <p>{new Date(stamps[idx]).toLocaleTimeString()}</p>
                     </div>
                   )}

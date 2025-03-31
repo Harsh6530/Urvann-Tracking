@@ -7,6 +7,7 @@ import Styles from "./DateWiseOrders.module.css";
 import { useState } from "react";
 import OrderStatusTimeline from "./OrderStatusTimeline";
 import { useRouter } from "next/navigation";
+import { useOrder } from "@/lib/OrderContext";
 
 const parseOrderDate = (date) => {
   const parsedDate = new Date(date);
@@ -35,6 +36,7 @@ const getDateString = (date) => {
 const DateWiseOrders = (props) => {
   const { orders, deliveryStatus, isReplacement } = props;
   const router = useRouter();
+  const { setSelectedOrders } = useOrder(); 
 
   orders.sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -89,7 +91,10 @@ const DateWiseOrders = (props) => {
                 key={date}
                 className={Styles.individualOrder}
                 onClick={() => {
-                  router.push(`/orders/${groupedOrders[date][0].txn_id}`);
+                  setSelectedOrders(groupedOrders[date]);
+                  router.push(`/orders/${groupedOrders[date][0].txn_id}?products=${deliveryStatus}/${getDateString(
+                    groupedOrders[date][0].date
+                  )}`);
                 }}>
                 <div
                   className="flex items-center justify-between cursor-pointer"

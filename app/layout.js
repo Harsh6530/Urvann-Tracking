@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import StoreProvider from "./StoreProvider";
 import StatusUpdateProvider from "@/Utils/StatusUpdateprovider";
+import { OrderProvider } from "@/lib/OrderContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,11 +29,13 @@ export default function RootLayout({ children }) {
       <body
         style={{ flex: 1 }}
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <StatusUpdateProvider />
-        <StoreProvider>
-          <Navbar />
-          {children}
-        </StoreProvider>
+        <StatusUpdateProvider/>
+          <OrderProvider>
+            <StoreProvider>
+              <Navbar />
+              {children}
+            </StoreProvider>
+          </OrderProvider>
       </body>
     </html>
   );

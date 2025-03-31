@@ -44,17 +44,19 @@ const Dot = ({ state, rider_name, rider_number }) => {
           </p>
         ) : state === "Delivered" ? (
           <p>Your Order is Delivered</p>
-        ) : (
-          ""
-        )}
+        ) : 
+          state==="Delivery Failed No Response" ? (
+            <p>Your Order is failed to be delivered</p>
+        ):""}
       </div>
       <span>{state}</span>
     </div>
   );
 };
 
-const Bar = ({ idx, total }) => {
-  return <div className={styles.bar}></div>;
+const Bar = ({ idx, total,state }) => {
+  const isFailed = failureStates.includes(state);
+  return <div className={styles.bar} style={{ backgroundColor: isFailed ? "red" : "green" }}></div>;
 };
 
 const Tracker = ({ tracker, stamps, rider_name, rider_number }) => {
@@ -89,7 +91,7 @@ const Tracker = ({ tracker, stamps, rider_name, rider_number }) => {
                     </div>
                   )}
                 </>
-                {idx < visibleSteps - 1 && <Bar />}
+                {idx < visibleSteps - 1 && <Bar state={mapping[tracker[idx+1]]}/>}
               </div>
             );
           })}

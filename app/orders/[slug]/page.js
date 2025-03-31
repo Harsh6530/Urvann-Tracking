@@ -163,7 +163,7 @@ const Page = ({ params }) => {
             rider_number={info.rider_number}
           />
         </div>
-        {!isFeedbackSubmitted && info.status === "Z-Delivered" && (
+        {!isFeedbackSubmitted && info.status === "Delivered" && (
           <div className="flex flex-col items-center self-center mt-4 bg-white rounded-[15px] shadow-lg">
             <FeedBack onSubmit={handleFeedbackSubmit} />
           </div>

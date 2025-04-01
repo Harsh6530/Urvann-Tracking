@@ -20,7 +20,7 @@ const Page = ({ params }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.userToken);
-  const { selectedOrders } = useOrder();
+  const { orders } = useOrder();
 
   const [info, setInfo] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -110,10 +110,9 @@ const Page = ({ params }) => {
 
   const { month, day, year } = getNextDayParts(info?.formattedDate);
 
-  const displayedImages = selectedOrders.slice(0, 4);
-  const extraItems = selectedOrders.length - 4;
+  const displayedImages = orders.slice(0, 4);
+  const extraItems = orders.length - 4;
 
-  console.log(selectedOrders);
   return (
     <div className={styles.container}>
       <div className={styles.details}>
@@ -138,17 +137,17 @@ const Page = ({ params }) => {
               alt={order.product}
               className={styles.productImage}
               onClick={() => handleImageClick(order)}
-              width={70}
-              height={50}
+              width={60}
+              height={40}
               style={{ cursor: "pointer" }}
             />
           ))}
           {extraItems > 0 && (
-            <button className={styles.moreButton}>+{extraItems} more</button>
+            <p className={styles.moreButton}>+{extraItems} more</p>
           )}
           {isPopupOpen && (
             <ProductDetailsPopup
-              products={selectedOrders}
+              products={orders}
               onClose={closePopup}
             />
           )}

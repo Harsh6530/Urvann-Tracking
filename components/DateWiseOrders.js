@@ -36,7 +36,7 @@ const getDateString = (date) => {
 const DateWiseOrders = (props) => {
   const { orders, deliveryStatus, isReplacement } = props;
   const router = useRouter();
-  const { setSelectedOrders } = useOrder(); 
+  const { setOrders } = useOrder(); 
 
   orders.sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -91,7 +91,7 @@ const DateWiseOrders = (props) => {
                 key={date}
                 className={Styles.individualOrder}
                 onClick={() => {
-                  setSelectedOrders(groupedOrders[date]);
+                  setOrders(groupedOrders[date]);
                   router.push(`/orders/${groupedOrders[date][0].txn_id}?products=${deliveryStatus}/${getDateString(
                     groupedOrders[date][0].date
                   )}`);

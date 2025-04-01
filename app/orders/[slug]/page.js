@@ -127,7 +127,7 @@ const Page = ({ params }) => {
           <p style={{ marginTop: "1rem", fontSize: "1rem", fontWeight: 600 }}>
             Order Status
           </p>
-          <span className={styles.order_status}>{mapping[info.status]}</span>
+          <span className={styles.order_status}>{mapping[info.status==="Close"?info.orderType==="Replacement"?"Replacement":info.status:info.status]}</span>
         </div>
         <div className={styles.productDetails}>
           {displayedImages.map((order, index) => (
@@ -160,6 +160,7 @@ const Page = ({ params }) => {
             stamps={info.trackerStamp}
             rider_name={info.rider_name}
             rider_number={info.rider_number}
+            orderType={info.orderType}
           />
         </div>
         {!isFeedbackSubmitted && info.status === "Delivered" && (

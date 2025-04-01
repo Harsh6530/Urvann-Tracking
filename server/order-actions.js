@@ -57,7 +57,7 @@ export async function fetchOrders(email, phone) {
 
     const orders = ordersPlaced.map((order) => {
       const txn_id = order.data.txn_id;
-      const status =order.data.status;
+      const status = order.data.status;
       console.log("Order items:", order.data.items); // Log order items
       // const status = order.Pickup_Status === "Not Picked"
       //     ? (order.metafield_order_type === "Replacement" ? "Replacement initiated" : "Order placed")
@@ -222,9 +222,12 @@ export async function fetchOrderByTxn(txn_id) {
       second: "2-digit",
       hour12: true,
     });
-    const rider_name=response[0].data.Rider_Name;
-    const rider_number=response[0].data.rider_number;
+    const rider_name = response[0].data.Rider_Name;
+    const rider_number = response[0].data.rider_number;
     const tracker = response[0].data.tracker;
+    const orderType = response[0].data.metafield_order_type
+      ? response[0].data.metafield_order_type
+      : "";
     const trackerStamp = response[0].data.trackerStamp;
     return {
       status: 200,
@@ -238,6 +241,7 @@ export async function fetchOrderByTxn(txn_id) {
         trackerStamp,
         rider_name,
         rider_number,
+        orderType
       },
     };
   } catch (error) {

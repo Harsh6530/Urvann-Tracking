@@ -17,14 +17,13 @@ import { mapping, failureStates } from "@/Utils/StateMapping";
 //   return show ? <>{children}</> : null;
 // };
 
-const Dot = ({ state, rider_name, rider_number }) => {
-  console.log(state);
+const Dot = ({ state, rider_name, rider_number, orderType }) => {
   const isFailed = failureStates.includes(state);
   return (
     <div className={styles.dotContainer}>
       <div
         className={styles.dot}
-        style={{ backgroundColor: isFailed ? "red" : "green" }}>
+        style={{ backgroundColor: isFailed ? "red" : state === "Delivered" && orderType === "Replacement" ? "yellow" : "green" }}>
         {state === "Order Placed" ? (
           <p>Your Order Has been placed</p>
         ) : state === "Picking Up" ? (
@@ -42,24 +41,31 @@ const Dot = ({ state, rider_name, rider_number }) => {
               {rider_number}
             </a>
           </p>
+        ) : state === "Delivered" && orderType === "Replacement" ? (
+          <p>Replacement Successful</p>
         ) : state === "Delivered" ? (
           <p>Your Order is Delivered</p>
-        ) : 
-          state==="Delivery Failed No Response" ? (
-            <p>Your Order is failed to be delivered</p>
-        ):""}
+        ) : state === "Delivery Failed No Response" ? (
+          <p>Your Order is failed to be delivered</p>
+        ) : (
+          ""
+        )}
       </div>
       <span>{state}</span>
     </div>
   );
 };
 
-const Bar = ({ idx, total,state }) => {
+const Bar = ({ idx, total, state }) => {
   const isFailed = failureStates.includes(state);
-  return <div className={styles.bar} style={{ backgroundColor: isFailed ? "red" : "green" }}></div>;
+  return (
+    <div
+      className={styles.bar}
+      style={{ backgroundColor: isFailed ? "red" : state === "Delivered" && orderType === "Replacement" ? "yellow" : "green" }}></div>
+  );
 };
 
-const Tracker = ({ tracker, stamps, rider_name, rider_number }) => {
+const Tracker = ({ tracker, stamps, rider_name, rider_number, orderType }) => {
   const [visibleSteps, setVisibleSteps] = useState(0);
   useEffect(() => {
     if (visibleSteps < tracker.length) {
@@ -83,6 +89,7 @@ const Tracker = ({ tracker, stamps, rider_name, rider_number }) => {
                     isActive={idx === visibleSteps - 1}
                     rider_name={rider_name}
                     rider_number={rider_number}
+                    orderType={orderType}
                   />
                   {stamps[idx] && (
                     <div className={styles.timeStamp}>
@@ -91,7 +98,9 @@ const Tracker = ({ tracker, stamps, rider_name, rider_number }) => {
                     </div>
                   )}
                 </>
-                {idx < visibleSteps - 1 && <Bar state={mapping[tracker[idx+1]]}/>}
+                {idx < visibleSteps - 1 && (
+                  <Bar state={mapping[tracker[idx + 1]]} />
+                )}
               </div>
             );
           })}

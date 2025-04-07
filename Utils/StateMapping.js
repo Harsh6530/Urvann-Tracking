@@ -7,8 +7,8 @@ export const mapping = {
   "Re-Pickup":"Re-Pickup",
   "Re-Picked":"Out for Delivery",
   "Z-Replacement Successful": "Replacement Done",
-  "A-Delivery Failed (CNR)": "Delivery Failed",
-  "A-Delivery failed (Rescheduled)": "Delivery Failed",
+  "A-Delivery Failed (CNR)": "Delivery Failed No Response",
+  "A-Delivery failed (Rescheduled)": "Delivery Rescheduled",
   "Z-Delivery Failed (customer cancelled)": "Delivery Failed",
   "A-Delivery Failed (rider side)": "Delivery Failed",
   "CNR":"Delivery Failed No Response",
@@ -23,5 +23,7 @@ export const failureStates = [
   "Delivery Failed",
   "A-Delivery Failed (CNR-2)",
   "CNR",
-  "Delivery Failed"
+  "Delivery Failed",
+  "Delivery Failed No Response",
+  "Delivery Rescheduled"
 ];

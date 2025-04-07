@@ -228,6 +228,7 @@ export async function fetchOrderByTxn(txn_id) {
     const orderType = response[0].data.metafield_order_type
       ? response[0].data.metafield_order_type
       : "";
+    const rescheduledAt = response[0]?.rescheduledAt ? response[0].rescheduledAt : null;
     const trackerStamp = response[0].data.trackerStamp;
     return {
       status: 200,
@@ -241,10 +242,35 @@ export async function fetchOrderByTxn(txn_id) {
         trackerStamp,
         rider_name,
         rider_number,
-        orderType
+        orderType,
+        rescheduledAt,
       },
     };
   } catch (error) {
+    return {
+      success: false,
+      status: error.status || 500,
+      message: error.message || "Internal Server Error",
+      error,
+    };
+  }
+}
+
+export async function updateResheduleDate(txn_id,rescheduleDate) {
+  try {
+    const {storeHippoConn}=await connectDB();
+    const Order = storeHippoConn.model("Order", OrderSchema);
+    const resposne = await Order.updateMany(
+      { "data.txn_id": txn_id },
+      { $set: { "rescheduledAt": rescheduleDate } }
+    );
+    return {
+      success: true,
+      status: 200,
+      message: "Your Order has been successfully rescheduled to " + rescheduleDate,
+    };
+  } catch (error) {
+    console.log(error);
     return {
       success: false,
       status: error.status || 500,

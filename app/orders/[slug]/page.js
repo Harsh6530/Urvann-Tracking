@@ -14,19 +14,21 @@ import FeedBack from "@/components/FeedBack";
 import { useOrder } from "@/lib/OrderContext";
 import Image from "next/image";
 import ProductDetailsPopup from "@/components/product-details-popup";
+import RescheduleDelivery from "@/components/Reschedule";
 
 const Page = ({ params }) => {
+  
   const router = useRouter();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.userToken);
   const { orders } = useOrder();
+  const txn_id = params.slug;
 
   const [info, setInfo] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] = useState(false);
-  const txn_id = params.slug;
 
   const handleImageClick = (product) => {
     setSelectedProduct(product);
@@ -131,16 +133,18 @@ const Page = ({ params }) => {
         </div>
         <div className={styles.productDetails}>
           {displayedImages.map((order, index) => (
+           order.imgURL && (
             <Image
               key={index}
               src={order.imgURL}
-              alt={order.product}
+              alt={order.product || "product"}
               className={styles.productImage}
               onClick={() => handleImageClick(order)}
               width={60}
               height={40}
               style={{ cursor: "pointer" }}
             />
+          )
           ))}
           {extraItems > 0 && (
             <p className={styles.moreButton}>+{extraItems} more</p>
@@ -163,11 +167,18 @@ const Page = ({ params }) => {
             orderType={info.orderType}
           />
         </div>
-        {!isFeedbackSubmitted && info.status === "Delivered" && (
+        {!isFeedbackSubmitted && info.status === "Close" && (
           <div className="flex flex-col items-center self-center mt-4 bg-white rounded-[15px] shadow-lg">
             <FeedBack onSubmit={handleFeedbackSubmit} />
           </div>
         )}
+        {
+          info.status ==="Reschedule" && !info.rescheduledAt && (
+            <div className="flex flex-col items-center self-center mt-4 bg-white rounded-[15px] shadow-lg">
+            <RescheduleDelivery txn_id={txn_id}/>
+          </div>
+          )
+        }
       </div>
     </div>
   );

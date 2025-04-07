@@ -17,13 +17,13 @@ import { mapping, failureStates } from "@/Utils/StateMapping";
 //   return show ? <>{children}</> : null;
 // };
 
-const Dot = ({ state, rider_name, rider_number, orderType }) => {
+const Dot = ({ state, rider_name, rider_number }) => {
   const isFailed = failureStates.includes(state);
   return (
     <div className={styles.dotContainer}>
       <div
         className={styles.dot}
-        style={{ backgroundColor: isFailed ? "red" : state === "Delivered" && orderType === "Replacement" ? "yellow" : "green" }}>
+        style={{ backgroundColor: isFailed ? "red" : "green"}}>
         {state === "Order Placed" ? (
           <p>Your Order Has been placed</p>
         ) : state === "Picking Up" ? (
@@ -41,9 +41,11 @@ const Dot = ({ state, rider_name, rider_number, orderType }) => {
               {rider_number}
             </a>
           </p>
-        ) : state === "Delivered" && orderType === "Replacement" ? (
-          <p>Replacement Successful</p>
-        ) : state === "Delivered" ? (
+        ) 
+        // : state === "Delivered" && orderType === "Replacement" ? (
+        //   <p>Replacement Successful</p>
+        // ) 
+        : state === "Delivered" ? (
           <p>Your Order is Delivered</p>
         ) : state === "Delivery Failed No Response" ? (
           <p>Your Order is failed to be delivered</p>
@@ -61,22 +63,22 @@ const Bar = ({ idx, total, state }) => {
   return (
     <div
       className={styles.bar}
-      style={{ backgroundColor: isFailed ? "red" : state === "Delivered" && orderType === "Replacement" ? "yellow" : "green" }}></div>
+      style={{ backgroundColor: isFailed ? "red" : "green"}}></div>
   );
 };
 
 const Tracker = ({ tracker, stamps, rider_name, rider_number, orderType }) => {
   const [visibleSteps, setVisibleSteps] = useState(0);
   useEffect(() => {
-    if (visibleSteps < tracker.length) {
+    if (visibleSteps < tracker?.length) {
       const timer = setTimeout(() => setVisibleSteps(visibleSteps + 1), 1000);
       return () => clearTimeout(timer);
     }
-  }, [visibleSteps, tracker.length]);
+  }, [visibleSteps, tracker?.length]);
 
   return (
     <div className={styles.tracker}>
-      {!tracker || tracker.length === 0 || !stamps || stamps.length === 0
+      {!tracker || tracker?.length === 0 || !stamps || stamps?.length === 0
         ? null
         : tracker.slice(0, visibleSteps).map((step, idx) => {
             return (
@@ -98,7 +100,7 @@ const Tracker = ({ tracker, stamps, rider_name, rider_number, orderType }) => {
                     </div>
                   )}
                 </>
-                {idx < visibleSteps - 1 && (
+                {idx < visibleSteps - 1 && step!=="Z-Delivered" && (
                   <Bar state={mapping[tracker[idx + 1]]} />
                 )}
               </div>
